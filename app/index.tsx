@@ -1,43 +1,39 @@
-import { SafeAreaView, Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useState } from "react";
-
-import Input from '../../app_projeto/src/components/Input';
-import Toast from '../src/components/Toast'
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useRef, useState } from "react";
+import Toast, { ToastHandle } from '../src/components/Toast';
+import Input from "@/src/components/Input";
 
 export default function Index() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'warn' | 'error' | 'default'>('default');
+  const toastRef = useRef<ToastHandle>(null);
 
-  // function logar() {
-  //   if(email == ''){
-  //     dispatch()
-  //   }
-  // }
+  function logar() {
+    if (email === '') {
+      setToastMessage("Email é obrigatório!");
+      setToastType('error'); // Define o tipo como "warn"
+      toastRef.current?.show(); // Exibe o Toast
+      setTimeout(() => toastRef.current?.hide(), 3000); // Oculta o toast após 3 segundos
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Toast />
-      {/* <View style={styles.logoView}>
-        <Image style={styles.logo} resizeMode="contain" source={require("../assets/images/logobranco.png")} />
-      </View> */}
-      {/* <Input iconName={'account'}
-        placeholder="Usuário"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-        autoCorrect={false}
-        keyboardType="email-address"
+      <Toast ref={toastRef} message={toastMessage} type={toastType} />
+
+      <Input
+        placeholder="Teste"
+        iconName="account"
       />
 
-      <Input iconName={'lock'}
-        secureTextEntry
-        autoCorrect={false}
+      <Input
         placeholder="Senha"
-        autoCapitalize="none"
-        keyboardType="default"
-      /> */}
+        iconName="lock"
+        secureTextEntry={true}
+      />
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={logar} style={styles.button}>
         <Text>Logar</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -48,15 +44,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    // backgroundColor: '#1E0175'
   },
-
-  logoView: {
+  button: {
     alignItems: 'center',
-    paddingTop: 75
+    padding: 10,
+    backgroundColor: '#2196F3',
+    borderRadius: 5,
+    marginHorizontal: 130
   },
-
-  logo: {
-    width: 325
-  }
-})
+});
