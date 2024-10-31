@@ -5,7 +5,6 @@ import Input from '../../app_projeto/src/components/Input';
 import Toast from '../src/components/Toast'
 
 export default function Index() {
-  // const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 

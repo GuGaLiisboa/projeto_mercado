@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     SafeAreaView, View, Text, StyleSheet, StatusBar, Platform, TouchableWithoutFeedback,
     Dimensions, Animated, Easing
@@ -23,6 +23,26 @@ const Toast = () => {
     //função corrigida pelo chatgpt
     const [styleStatusBar, setStyleStatusBar] = useState<"default" | "light-content" | "dark-content">('dark-content');
     const pos = new Animated.Value(-(getStatusBarHeight() + 60));
+
+    useEffect(() => show(), []);
+
+    function show() {
+        Animated.timing(pos, {
+            toValue: 0,
+            useNativeDriver: true,
+            duration: 200,
+            easing: Easing.linear,
+        }).start();
+    }
+
+    function hide() {
+        Animated.timing(pos, {
+            toValue: -(getStatusBarHeight() + 60),
+            useNativeDriver: true,
+            duration: 200,
+            easing: Easing.linear,
+        }).start();
+    }
 
     // função original do video
     // function zIndex(val) {
