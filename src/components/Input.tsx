@@ -1,73 +1,88 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-
-
+import React, { useState, forwardRef, useImperativeHandle, createRef } from "react";
+import { View, StyleSheet, TextInput, TextInputProps, TouchableOpacity } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-const Input = (props) => {
-    const [sec, setSec] = useState(props.secureTextEntry)
+// Definindo os props com uma interface
+interface InputProps extends TextInputProps {
+    iconName?: keyof typeof MaterialCommunityIcons.glyphMap; // Tipagem para `iconName`
+    secureTextEntry?: boolean; // Prop opcional
+}
+
+const Input = forwardRef<TextInput, InputProps>(({ iconName, secureTextEntry, ...props }, ref) => {
+    const [sec, setSec] = useState(secureTextEntry || false);
+    const [error, setError] = useState(false);
+    const inputref = createRef();
+
+    useImperativeHandle(ref, () => ({
+        focusOnError() {
+            setError(true);
+            inputref.current.focus();
+        },
+        resetError() {
+            setError(false);
+        }
+    }));
     return (
         <View style={styles.container}>
             <TextInput
-                style={styles.input}
-                underlineColorAndroid='transparent'
-                placeholderTextColor={'#949494'}
-                {...props}
+                style={[styles.input, { borderColor: error ? "#e91e63" : "#949494", }]}
+                ref={inputref}
+                underlineColorAndroid="transparent"
+                placeholderTextColor="#949494"
                 secureTextEntry={sec}
+                {...props}
             />
 
-            <MaterialCommunityIcons
-                name={props.iconName}
-                size={26}
-                color={'#949494'}
-                style={styles.icon}
-            />
+            {iconName && (
+                <MaterialCommunityIcons
+                    name={iconName}
+                    size={26}
+                    color={error ? "#e91e63" : "#444"}
+                    style={styles.icon}
+                />
+            )}
 
-            {props.secureTextEntry && (
+            {secureTextEntry && (
                 <TouchableOpacity onPress={() => setSec(!sec)}>
                     <Ionicons
                         name={sec ? "eye" : "eye-off"}
                         size={26}
-                        color={'#949494'}
-                        style={styles.iconeOlho} />
+                        color="#949494"
+                        style={styles.iconeOlho}
+                    />
                 </TouchableOpacity>
             )}
-
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        marginTop: 20
+        flexDirection: "row",
+        marginTop: 20,
     },
-
     input: {
         height: 50,
         flex: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: "#FFF",
         paddingLeft: 40,
         marginHorizontal: 20,
         borderRadius: 10,
         fontSize: 18,
-        borderColor: '#949494',
-        borderWidth: 1
+        borderWidth: 1,
     },
-
     icon: {
-        position: 'absolute',
+        position: "absolute",
         left: 30,
-        top: 12
+        top: 12,
     },
-
     iconeOlho: {
-        position: 'absolute',
+        position: "absolute",
         right: 30,
-        top: 12
-    }
-})
+        top: 12,
+    },
+});
 
 export default Input;
