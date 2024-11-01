@@ -1,18 +1,28 @@
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
+
+export interface InputHandle {
+  focusOnError: () => void;
+  resetError: () => void;
+}
 
 export default function Index() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const toastRef = useRef<ToastHandle>(null);
 
-  const emailInput = useRef<TextInput>(null);
-  const senhaInput = useRef<TextInput>(null);
+  const emailInput = useRef<InputHandle>(null);
+  const senhaInput = useRef<InputHandle>(null);
 
-  useEffect(() => emailInput.current.resetError(), [email]);
-  useEffect(() => senhaInput.current.resetError(), [senha]);
+  useEffect(() => {
+    emailInput.current?.resetError();
+  }, [email]);
+
+  useEffect(() => {
+    senhaInput.current?.resetError();
+  }, [senha]);
 
   function logar() {
     if (email === '') {
@@ -76,6 +86,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
     borderRadius: 5,
     marginHorizontal: 130,
-    marginTop: 20
+    marginTop: 20,
   },
 });
