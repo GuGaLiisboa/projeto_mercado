@@ -1,7 +1,8 @@
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Image, View } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export interface InputHandle {
   focusOnError: () => void;
@@ -45,6 +46,11 @@ export default function Index() {
     <SafeAreaView style={styles.container}>
       <Toast ref={toastRef} />
 
+      <View style={styles.logoContainer}>
+        <Image source={require('../assets/images/logobranco.png')} style={styles.logo} />
+      </View>
+
+      <Text style={{ color: '#FFF', fontSize: 30, fontWeight: 'bold', marginHorizontal: 20 }}>Login</Text>
       <Input
         ref={emailInput}
         iconName={"account"}
@@ -69,7 +75,8 @@ export default function Index() {
       />
 
       <TouchableOpacity onPress={logar} style={styles.button}>
-        <Text>Logar</Text>
+        <MaterialCommunityIcons name={"login"} size={26} color={"#FFF"} style={styles.iconBtn} />
+        <Text style={styles.txtBtn}>Logar</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -79,13 +86,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#1E0175'
   },
-  button: {
+
+  logoContainer: {
     alignItems: 'center',
+  },
+
+  logo: {
+    width: 300,
+    height: 100,
+    marginTop: -100
+  },
+
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
-    backgroundColor: '#2196F3',
+    backgroundColor: '#FF8800',
     borderRadius: 5,
-    marginHorizontal: 130,
+    marginHorizontal: 20,
     marginTop: 20,
   },
+
+  iconBtn: {
+    marginRight: 5
+  },
+
+  txtBtn: {
+    color: "#FFF",
+    fontSize: 16
+  }
 });
