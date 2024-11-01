@@ -11,8 +11,8 @@ export default function Index() {
 
   function logar() {
     if (email === '') {
-      setToastMessage("Email é obrigatório!");
-      setToastType('error'); // Define o tipo como "warn"
+      // setToastMessage("Email é obrigatório!");
+      // setToastType('error'); // Define o tipo como "warn"
       toastRef.current?.show(); // Exibe o Toast
       setTimeout(() => toastRef.current?.hide(), 3000); // Oculta o toast após 3 segundos
     }
@@ -20,7 +20,8 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Toast ref={toastRef} message={toastMessage} type={toastType} />
+      <Toast ref={toastRef} message="Email está incorreto." type="warn" iconName="home" />
+
 
       <Input
         placeholder="Teste"

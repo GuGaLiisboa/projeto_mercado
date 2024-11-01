@@ -11,6 +11,7 @@ const { width } = Dimensions.get('window');
 interface ToastProps {
     message: string;
     type?: 'success' | 'warn' | 'error' | 'default';
+    iconName?: keyof typeof MaterialCommunityIcons.glyphMap; // Tipo para nome de ícone
 }
 
 export interface ToastHandle {
@@ -18,7 +19,7 @@ export interface ToastHandle {
     hide: () => void;
 }
 
-const Toast = forwardRef<ToastHandle, ToastProps>(({ message, type = 'default' }, ref) => {
+const Toast = forwardRef<ToastHandle, ToastProps>(({ message, type = 'default', iconName }, ref) => {
     const colors = {
         success: '#43D29E',
         warn: '#fd951f',
@@ -71,14 +72,19 @@ const Toast = forwardRef<ToastHandle, ToastProps>(({ message, type = 'default' }
     return (
         <View style={[styles.toastContainer, zIndex(100)]}>
             <StatusBar
-                barStyle="dark-content"
+                barStyle="light-content"
                 translucent={true}
                 backgroundColor={'#FFF'}
             />
             <TouchableWithoutFeedback onPress={hide}>
-                <Animated.View style={[styles.default, { backgroundColor: colors[type], transform: [{ translateY: pos }] }]}>
-                    <View style={styles.msgContainer} >
-                        <MaterialCommunityIcons name="account" color="#FFF" size={26} />
+                <Animated.View style={[
+                    styles.default,
+                    { backgroundColor: colors[type], transform: [{ translateY: pos }] }
+                ]}>
+                    <View style={styles.msgContainer}>
+                        {iconName && (
+                            <MaterialCommunityIcons name={iconName} color="#FFF" size={26} />
+                        )}
                         <Text style={styles.txt}>{message}</Text>
                     </View>
                 </Animated.View>
