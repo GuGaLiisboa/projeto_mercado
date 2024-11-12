@@ -4,6 +4,11 @@ import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../scripts/firebase-config";
+import { get, ref } from 'firebase/database';
+
+
 
 export interface InputHandle {
   focusOnError: () => void;
@@ -14,7 +19,7 @@ export default function Index() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
   const toastRef = useRef<ToastHandle>(null);
 
   const emailInput = useRef<InputHandle>(null);
@@ -26,23 +31,79 @@ export default function Index() {
 
   useEffect(() => {
     senhaInput.current?.resetError();
-  }, [senha]);
+  }, [password]);
 
-  function logar() {
+  function validarLogin() {
     if (email === '') {
       toastRef.current?.show({
         message: "Email inválido!", type: 'error', iconName: 'email'
       });
       emailInput.current?.focusOnError();
-      return;
+      return false;
     }
-    if (senha === '') {
+    if (password === '') {
       toastRef.current?.show({
         message: "Senha Inválida!", type: 'error', iconName: 'lock'
       });
       senhaInput.current?.focusOnError();
+      return false;
+    }
+    return true;
+  }
+
+  const login = () => {
+    if (!validarLogin()) {
+      // Se a validação falhar, interrompe a execução aqui
       return;
     }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+
+        // Exibir os dados do usuário no log
+        console.log("Dados do usuário logado:", user);
+        console.log("UID:", user.uid);
+        console.log("Email:", user.email);
+
+        // Agora, buscar dados adicionais do usuário no Firebase Realtime Database
+        get(ref(db, 'user/' + user.uid))
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const userData = snapshot.val();
+              console.log("Nome:", userData.nome);
+              console.log("Telefone:", userData.telefone);
+              console.log("Endereço:", userData.endereco);
+
+              // Exemplo de como você pode exibir esses dados no log
+              console.log("Dados completos do usuário:", userData);
+            } else {
+              console.log("Nenhum dado encontrado para este usuário.");
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar dados do usuário:", error);
+          });
+
+        toastRef.current?.show({
+          message: "Login realizado com sucesso!",
+          type: 'success',
+          iconName: 'check-circle'
+        });
+
+        setTimeout(() => {
+          router.push("./internas/home"); // Redirecionar após o login
+        }, 1000); // Ajuste o delay conforme necessário
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toastRef.current?.show({
+          message: errorMessage,
+          type: 'error',
+          iconName: 'alert'
+        });
+      });
   }
 
   return (
@@ -71,13 +132,13 @@ export default function Index() {
         secureTextEntry
         placeholder="Senha"
         autoCapitalize="none"
-        value={senha}
-        onChangeText={setSenha}
+        value={password}
+        onChangeText={setPassword}
         autoCorrect={false}
         keyboardType="default"
       />
 
-      <TouchableOpacity onPress={logar} style={styles.button}>
+      <TouchableOpacity onPress={validarLogin} onPressIn={login} style={styles.button}>
         <MaterialCommunityIcons name={"login"} size={26} color={"#FFF"} style={styles.iconBtn} />
         <Text style={styles.txtBtn}>Logar</Text>
       </TouchableOpacity>
@@ -132,7 +193,7 @@ const styles = StyleSheet.create({
   cadastro: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
     marginTop: 50
   },
 
