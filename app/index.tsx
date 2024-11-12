@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export interface InputHandle {
   focusOnError: () => void;
@@ -10,6 +11,9 @@ export interface InputHandle {
 }
 
 export default function Index() {
+  console.log("index.tsx carregado");
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const toastRef = useRef<ToastHandle>(null);
@@ -78,6 +82,13 @@ export default function Index() {
         <MaterialCommunityIcons name={"login"} size={26} color={"#FFF"} style={styles.iconBtn} />
         <Text style={styles.txtBtn}>Logar</Text>
       </TouchableOpacity>
+
+      <View style={styles.cadastro}>
+        <Text style={styles.txtBtn}>Novo por aqui?</Text>
+        <TouchableOpacity onPress={() => router.push('/user_create')}>
+          <Text style={styles.txtCadastro}> CADASTRE-SE</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 300,
     height: 100,
-    marginTop: -100
+    marginTop: -150
   },
 
   button: {
@@ -107,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF8800',
     borderRadius: 5,
     marginHorizontal: 20,
-    marginTop: 20,
+    marginTop: 20
   },
 
   iconBtn: {
@@ -117,5 +128,18 @@ const styles = StyleSheet.create({
   txtBtn: {
     color: "#FFF",
     fontSize: 16
+  },
+
+  cadastro: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    marginTop: 50
+  },
+
+  txtCadastro: {
+    color: '#FF8800',
+    fontSize: 16,
+    textDecorationLine: 'underline'
   }
 });
