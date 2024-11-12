@@ -14,7 +14,6 @@ export interface InputHandle {
 }
 
 export default function Index() {
-    console.log("user_create.tsx carregado");
     const router = useRouter();
 
     const [nome, setNome] = useState('');
@@ -31,6 +30,18 @@ export default function Index() {
     const enderecoInput = useRef<InputHandle>(null);
 
     useEffect(() => {
+        nomeInput.current?.resetError();
+    }, [nome]);
+
+    useEffect(() => {
+        telefoneInput.current?.resetError();
+    }, [telefone]);
+
+    useEffect(() => {
+        enderecoInput.current?.resetError();
+    }, [endereco]);
+
+    useEffect(() => {
         emailInput.current?.resetError();
     }, [email]);
 
@@ -41,32 +52,37 @@ export default function Index() {
     function validarCadastro() {
         if (nome === '') {
             toastRef.current?.show({
-                message: "Nome inválido!", type: 'error', iconName: 'account'
+                message: "Nome inválido!", type: 'error', iconName: 'alert-circle'
             });
-            return false;
-        }
-        if (email === '') {
-            toastRef.current?.show({
-                message: "Email inválido!", type: 'error', iconName: 'email'
-            });
+            nomeInput.current?.focusOnError();
             return false;
         }
         if (telefone === '') {
             toastRef.current?.show({
-                message: "Telefone inválido!", type: 'error', iconName: 'phone'
+                message: "Telefone inválido!", type: 'error', iconName: 'alert-circle'
             });
+            telefoneInput.current?.focusOnError();
             return false;
         }
         if (endereco === '') {
             toastRef.current?.show({
-                message: "Endereço inválido!", type: 'error', iconName: 'location'
+                message: "Endereço inválido!", type: 'error', iconName: 'alert-circle'
             });
+            enderecoInput.current?.focusOnError();
+            return false;
+        }
+        if (email === '') {
+            toastRef.current?.show({
+                message: "Email inválido!", type: 'error', iconName: 'alert-circle'
+            });
+            emailInput.current?.focusOnError();
             return false;
         }
         if (password === '') {
             toastRef.current?.show({
-                message: "Senha inválida!", type: 'error', iconName: 'lock'
+                message: "Senha inválida!", type: 'error', iconName: 'alert-circle'
             });
+            senhaInput.current?.focusOnError();
             return false;
         }
         return true;
@@ -90,20 +106,33 @@ export default function Index() {
                     endereco: endereco   // Endereço
                 })
                     .then(() => {
-                        // Redirecionar para a tela de login ou qualquer outra página
-                        router.push('/');
+                        // Exibir Toast de sucesso
+                        toastRef.current?.show({
+                            message: "Cadastro realizado com sucesso!",
+                            type: 'success',
+                            iconName: 'check-circle'
+                        });
+
+                        setTimeout(() => {
+                            // Redirecionar para a tela de login ou qualquer outra página
+                            router.push('/');
+                        }, 2000); // Ajuste o tempo de delay conforme necessário
                     })
                     .catch((error) => {
                         console.error("Erro ao salvar dados no Realtime Database:", error);
                         toastRef.current?.show({
-                            message: "Erro ao salvar dados!", type: 'error', iconName: 'database'
+                            message: "Erro ao salvar dados!",
+                            type: 'error',
+                            iconName: 'database'
                         });
                     });
             })
             .catch((error) => {
                 const errorMessage = error.message;
                 toastRef.current?.show({
-                    message: errorMessage, type: 'error', iconName: 'alert'
+                    message: errorMessage,
+                    type: 'error',
+                    iconName: 'alert'
                 });
             });
     };
@@ -121,7 +150,7 @@ export default function Index() {
 
             <Input
                 ref={nomeInput}
-                iconName={"rename-box"}
+                iconName={"account"}
                 placeholder="Nome completo"
                 keyboardType="default"
                 value={nome}
@@ -148,7 +177,7 @@ export default function Index() {
 
             <Input
                 ref={emailInput}
-                iconName={"account"}
+                iconName={"email"}
                 placeholder="E-mail"
                 autoCapitalize="none"
                 value={email}

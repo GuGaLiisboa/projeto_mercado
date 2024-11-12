@@ -11,7 +11,6 @@ export interface InputHandle {
 }
 
 export default function Index() {
-  console.log("index.tsx carregado");
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -32,7 +31,7 @@ export default function Index() {
   function logar() {
     if (email === '') {
       toastRef.current?.show({
-        message: "Email inválido!", type: 'error', iconName: 'account'
+        message: "Email inválido!", type: 'error', iconName: 'email'
       });
       emailInput.current?.focusOnError();
       return;
@@ -57,7 +56,7 @@ export default function Index() {
       <Text style={{ color: '#FFF', fontSize: 30, fontWeight: 'bold', marginHorizontal: 20 }}>Login</Text>
       <Input
         ref={emailInput}
-        iconName={"account"}
+        iconName={"email"}
         placeholder="E-mail"
         autoCapitalize="none"
         value={email}
