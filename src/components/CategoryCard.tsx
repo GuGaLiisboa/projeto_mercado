@@ -1,34 +1,46 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-const CategoryCard = ({ category, onPress }) => (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-        <Image source={{ uri: category.icon }} style={styles.icon} />
-        <Text style={styles.name}>{category.name}</Text>
-    </TouchableOpacity>
-);
+const CategoryCard = ({ category }) => {
+    return (
+        <TouchableOpacity style={styles.card}>
+            <View style={styles.content}>
+                <Image source={{ uri: category.image }} style={styles.image} />
+                <Text style={styles.text}>{category.name}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};
 
 const styles = StyleSheet.create({
     card: {
-        alignItems: "center",
-        marginRight: 10,
-    },
-    icon: {
-        width: 50,
-        height: 50,
-        marginBottom: 5,
-        backgroundColor: "#fff",
+        width: 80, // Largura fixa para manter o quadrado
+        height: 80, // Altura fixa igual à largura
         borderRadius: 10,
+        backgroundColor: "#fff",
+        justifyContent: "center",
         alignItems: "center",
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
+        elevation: 3, // Sombra no Android
+        shadowColor: "#000", // Sombra no iOS
         shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 5,
-        elevation: 3,
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        marginHorizontal: 5,
+        marginVertical: 10,
     },
-    name: {
+    content: {
+        alignItems: "center",
+    },
+    image: {
+        width: 40, // Ajuste proporcional
+        height: 40,
+        resizeMode: "contain",
+        marginBottom: 5,
+    },
+    text: {
         fontSize: 12,
-        fontWeight: "bold",
+        textAlign: "center",
+        color: "#333",
     },
 });
 
