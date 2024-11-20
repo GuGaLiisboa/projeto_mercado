@@ -34,4 +34,11 @@ export default [
         description: "Leite Integral 1L",
         image: "https://piracanjuba-institucional-prd.s3.sa-east-1.amazonaws.com/product_images/image/848x1007px-uht-integral-frontal-esquerda-461.webp",
     },
+    {
+        id: 6,
+        name: "Leite Integral",
+        price: 3.49,
+        description: "Leite Integral 1L",
+        image: "https://piracanjuba-institucional-prd.s3.sa-east-1.amazonaws.com/product_images/image/848x1007px-uht-integral-frontal-esquerda-461.webp",
+    },
 ];

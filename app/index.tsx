@@ -93,7 +93,7 @@ export default function Index() {
         });
 
         setTimeout(() => {
-          router.push("./internas/home"); // Redirecionar após o login
+          router.push("./internas/Home"); // Redirecionar após o login
         }, 1000); // Ajuste o delay conforme necessário
       })
       .catch((error) => {
