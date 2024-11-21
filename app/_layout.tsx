@@ -11,6 +11,8 @@ export default function RootLayout() {
       
       {/* Tabs (antiga 'internas') */}
       <Stack.Screen options={{ headerShown: false }} name="(tabs)" />
+
+      <Stack.Screen options={{ headerShown: false }} name="product" />
     </Stack>
   );
 }
