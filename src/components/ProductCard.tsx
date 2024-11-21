@@ -1,13 +1,21 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useRouter } from "expo-router"; // Importa o roteador para navegação
 
-const ProductCard = ({ product, onPress }) => (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-        <Image source={{ uri: product.image }} style={styles.image} />
-        <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.price}>R$ {product.price.toFixed(2)}</Text>
-    </TouchableOpacity>
-);
+const ProductCard = ({ product }) => {
+    const router = useRouter(); // Instancia o roteador para redirecionamento
+
+    return (
+        <TouchableOpacity 
+            style={styles.card} 
+            onPress={() => router.push(`../product/${product.id}`)} // Navega para a página de detalhes
+        >
+            <Image source={{ uri: product.image }} style={styles.image} />
+            <Text style={styles.name}>{product.name}</Text>
+            <Text style={styles.price}>R$ {product.price.toFixed(2)}</Text>
+        </TouchableOpacity>
+    );
+};
 
 const styles = StyleSheet.create({
     card: {
