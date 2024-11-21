@@ -1,12 +1,15 @@
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View, Text, FlatList } from "react-native";
 import ProductCard from "../../src/components/ProductCard"; // Componente de produto
-import productsData from "../../src/components/productsData"; // Dados dos produtos
+import { useProducts } from "../../src/context/ProductContext"; // Hook para acessar os dados do contexto
 import categoriesData from "../../src/components/categoriesData"; // Dados das categorias
 import BannerSlider from "../../src/components/BannerSlider"; // Slide de banners
 import CategoryCard from "../../src/components/CategoryCard"; // Componente de categorias
 
 export default function Index({ navigation }) {
+    // Obtendo os produtos do contexto
+    const { products } = useProducts();
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -35,7 +38,7 @@ export default function Index({ navigation }) {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Mais Vendidos</Text>
                     <FlatList
-                        data={productsData}
+                        data={products}
                         renderItem={({ item }) => (
                             <ProductCard
                                 product={item}
