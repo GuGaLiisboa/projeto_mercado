@@ -6,12 +6,10 @@ const ProductCard = ({ product }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    console.log("Navegando com produto:", product);  // Verifique os dados do produto
-    router.push({
-      pathname: `/product/[id]`,
-      query: { id: product.id.toString() },  // Passando o id como uma string
-    });
+    console.log("Navegando com produto:", product); // Para depuração
+    router.push(`/product/${product.id}`); // Navegando para /product/[id]
   };
+
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
