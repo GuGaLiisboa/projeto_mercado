@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../scripts/firebase-config";
 import { get, ref } from 'firebase/database';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export interface InputHandle {
@@ -61,28 +61,22 @@ export default function Index() {
     Keyboard.dismiss();
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in 
+      .then(async (userCredential) => {
         const user = userCredential.user;
+
+        // Salvar o UID no AsyncStorage
+        await AsyncStorage.setItem("userUid", user.uid);
 
         // Exibir os dados do usuário no log
         console.log("Dados do usuário logado:", user);
         console.log("UID:", user.uid);
         console.log("Email:", user.email);
 
-        // Agora, buscar dados adicionais do usuário no Firebase Realtime Database
+        // Buscar dados adicionais do usuário
         get(ref(db, 'user/' + user.uid))
           .then((snapshot) => {
             if (snapshot.exists()) {
-              const userData = snapshot.val();
-              console.log("Nome:", userData.nome);
-              console.log("Telefone:", userData.telefone);
-              console.log("Endereço:", userData.endereco);
-
-              // Exemplo de como você pode exibir esses dados no log
-              console.log("Dados completos do usuário:", userData);
-            } else {
-              console.log("Nenhum dado encontrado para este usuário.");
+              console.log("Dados do usuário:", snapshot.val());
             }
           })
           .catch((error) => {

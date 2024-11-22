@@ -1,8 +1,11 @@
 import { usePathname } from "expo-router";
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import productsData from "../../src/components/productsData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { db } from "../../scripts/firebase-config";
+import { ref, set, get, remove } from "firebase/database";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductDetail = () => {
   const pathname = usePathname();
@@ -15,6 +18,39 @@ const ProductDetail = () => {
 
   // Filtrar produtos relacionados (excluindo o produto atual)
   const relatedProducts = productsData.filter((item) => item.id !== Number(id));
+  const userId = "demoUser";
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      const userUid = await AsyncStorage.getItem("userUid"); // Recupera o UID do AsyncStorage
+      if (!userUid) return; // Garantir que o UID esteja disponível
+
+      const favoriteRef = ref(db, `user/${userUid}/favoritos/${id}`);
+      const snapshot = await get(favoriteRef);
+      setIsFavorite(snapshot.exists());
+    };
+
+    fetchFavoriteStatus();
+  }, [id]);
+
+  const toggleFavorite = async () => {
+    const userUid = await AsyncStorage.getItem("userUid");
+    if (!userUid) return;
+
+    const favoriteRef = ref(db, `user/${userUid}/favoritos/${id}`);
+    if (isFavorite) {
+      await remove(favoriteRef);
+      setIsFavorite(false);
+    } else {
+      await set(favoriteRef, {
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        price: product.price,
+      });
+      setIsFavorite(true);
+    }
+  };
 
   if (!product) {
     return (
@@ -45,7 +81,7 @@ const ProductDetail = () => {
         {/* Coração de Favorito */}
         <TouchableOpacity
           style={styles.favoriteIcon}
-          onPress={() => setIsFavorite(!isFavorite)}
+          onPress={toggleFavorite}
         >
           <MaterialCommunityIcons
             name="heart"
