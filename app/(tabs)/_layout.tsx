@@ -18,6 +18,18 @@ export default function Layout() {
               size={32}
             />
           ),
+          headerRight: () => (
+            <MaterialCommunityIcons
+              name="cart"
+              size={35}
+              color="white"
+              style={{ marginRight: 10 }}
+              onPress={() => {
+                console.log("Ícone do carrinho clicado!");
+                // Navegação futura: router.push('/cart');
+              }}
+            />
+          ),
         }}
       />
 
