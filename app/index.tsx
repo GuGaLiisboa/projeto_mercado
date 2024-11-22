@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Image, View } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Image, View, Keyboard } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
@@ -56,6 +56,9 @@ export default function Index() {
       // Se a validação falhar, interrompe a execução aqui
       return;
     }
+
+
+    Keyboard.dismiss();
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
