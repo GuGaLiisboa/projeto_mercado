@@ -55,7 +55,7 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <View style={styles.container}>
-        <Text style={styles.error}>Produto não encontrado.</Text>
+        {/* <Text style={styles.error}>Produto não encontrado.</Text> */}
       </View>
     );
   }

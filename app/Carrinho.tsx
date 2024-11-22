@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 interface CartItem {
   id: number;
@@ -69,7 +70,7 @@ const Carrinho = () => {
   return (
     <View style={styles.container}>
       {cartItems.length === 0 ? (
-        <Text style={styles.emptyCartText}>Seu carrinho está vazio.</Text>
+        <Text style={styles.emptyCartText}>Seu carrinho está vazio..</Text>
       ) : (
         <FlatList
           data={cartItems}

@@ -42,7 +42,7 @@ export default function Layout() {
                 color="white"
                 style={styles.cartIcon}
                 onPress={() => {
-                  router.push('../telas/Carrinho'); // Navega para o carrinho
+                  router.push('/Carrinho'); // Navega para o carrinho
                 }}
               />
             </View>
@@ -109,39 +109,37 @@ export default function Layout() {
           ),
         }}
       />
-
-      <Tabs.Screen name="telas" />
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: "row", 
-    justifyContent: "space-between", 
-    alignItems: "center", 
-    width: "100%", 
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
   },
   searchContainer: {
-    flexDirection: "row", 
-    alignItems: "center", 
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "white",
     borderRadius: 5,
     paddingHorizontal: 10,
-    width: 350, 
+    width: 350,
     height: 35,
     marginBottom: 10
   },
   searchIcon: {
-    marginRight: 5, 
+    marginRight: 5,
   },
   searchInput: {
-    flex: 1, 
+    flex: 1,
     color: "black",
     fontSize: 16,
   },
   cartIcon: {
-    marginRight: 0, 
+    marginRight: 0,
     marginLeft: 5,
     marginBottom: 10
   },

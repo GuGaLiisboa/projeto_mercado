@@ -27,7 +27,7 @@ export default function Layout() {
                             onPress={() => router.back()} // Voltar para a tela anterior
                         />
                     ),
-                    
+
                     // Ícone do carrinho (lado direito)
                     headerRight: () => (
                         <MaterialCommunityIcons
@@ -37,7 +37,7 @@ export default function Layout() {
                             style={{ marginRight: 10 }}
                             onPress={() => {
                                 console.log("Ícone do carrinho clicado!");
-                                router.push('/telas/Carrinho');
+                                router.push('/Carrinho');
                             }}
                         />
                     ),
