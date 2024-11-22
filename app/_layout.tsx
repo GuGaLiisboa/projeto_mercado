@@ -13,6 +13,8 @@ export default function RootLayout() {
       <Stack.Screen options={{ headerShown: false }} name="(tabs)" />
 
       <Stack.Screen options={{ headerShown: false }} name="product" />
+
+      {/* <Stack.Screen name="telas" /> */}
     </Stack>
   );
 }

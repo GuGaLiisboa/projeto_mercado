@@ -37,7 +37,7 @@ export default function Layout() {
                             style={{ marginRight: 10 }}
                             onPress={() => {
                                 console.log("Ícone do carrinho clicado!");
-                                // Navegação futura: router.push('/cart');
+                                router.push('/telas/Carrinho');
                             }}
                         />
                     ),

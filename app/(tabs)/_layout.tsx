@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 
 export default function Layout() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para armazenar o valor da pesquisa
@@ -42,8 +42,7 @@ export default function Layout() {
                 color="white"
                 style={styles.cartIcon}
                 onPress={() => {
-                  console.log("Ícone do carrinho clicado!");
-                  // Navegação futura: router.push('/cart');
+                  router.push('../telas/Carrinho'); // Navega para o carrinho
                 }}
               />
             </View>
@@ -110,6 +109,8 @@ export default function Layout() {
           ),
         }}
       />
+
+      <Tabs.Screen name="telas" />
     </Tabs>
   );
 }
