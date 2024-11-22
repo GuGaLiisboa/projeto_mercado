@@ -34,4 +34,11 @@ export default [
         description: "Leite Integral 1L",
         image: "https://piracanjuba-institucional-prd.s3.sa-east-1.amazonaws.com/product_images/image/848x1007px-uht-integral-frontal-esquerda-461.webp",
     },
+    {
+        id: 6,
+        name: "Leite Integral 1L",
+        price: 3.49,
+        description: "O Leite Integral Piracanjuba é uma opção saborosa e nutritiva, perfeito para o dia a dia. Rico em cálcio e vitaminas, é ideal para acompanhar cafés, preparar sobremesas ou consumir puro. Embalagem prática e segura com tecnologia de longa vida. Qualidade garantida por uma das marcas mais tradicionais do Brasil.",
+        image: "https://piracanjuba-institucional-prd.s3.sa-east-1.amazonaws.com/product_images/image/848x1007px-uht-integral-frontal-esquerda-461.webp",
+    },
 ];
