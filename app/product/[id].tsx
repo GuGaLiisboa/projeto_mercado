@@ -1,4 +1,4 @@
-import { usePathname } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import productsData from "../../src/components/productsData";
 import { useState, useEffect } from "react";
@@ -8,6 +8,7 @@ import { ref, set, get, remove } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductDetail = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const id = pathname.split("/").pop();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -79,7 +80,11 @@ const ProductDetail = () => {
 
   // Função para incrementar a quantidade
   const increment = () => {
-    setQuantity(quantity + 1);
+    if(quantity < 999) {
+      setQuantity(quantity + 1);
+    } else {
+      alert("Quantidade máxima atingida!");
+    }
   };
 
   // Função para decrementar a quantidade
@@ -196,7 +201,7 @@ const ProductDetail = () => {
             horizontal
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.relatedItem}>
+              <TouchableOpacity style={styles.relatedItem} onPress={() => router.push(`/product/${item.id}`)} >
                 <Image source={{ uri: item.image }} style={styles.relatedImage} />
                 <Text style={styles.relatedName}>{item.name}</Text>
               </TouchableOpacity>
@@ -252,11 +257,12 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
+    // alignItems: "center",
+    alignItems: "flex-start",
+    marginBottom: 5,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#333",
     flex: 1,
@@ -265,10 +271,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: '#1E0175',
-    borderRadius: 20
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   quantityButton: {
-    padding: 10,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
   },
   quantityText: {
     fontSize: 20,
@@ -276,7 +285,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   quantity: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     marginHorizontal: 5,
     color: 'white'
@@ -334,8 +343,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   relatedItem: {
-    marginRight: 10,
+    marginRight: 15,
     alignItems: "center",
+    maxWidth: 100
   },
   relatedImage: {
     width: 80,
@@ -344,9 +354,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   relatedName: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#666",
     marginTop: 5,
+    textAlign: 'center',
   },
   footer: {
     flexDirection: "row",
