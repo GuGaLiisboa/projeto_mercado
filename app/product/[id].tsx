@@ -13,8 +13,25 @@ const ProductDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false); // Estado para menu oculto
   const [quantity, setQuantity] = useState(1); // Estado para a quantidade do produto
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   const product = productsData.find((item) => item.id === Number(id));
+
+  const updateCartQuantity = async () => {
+    try {
+      const storedCart = await AsyncStorage.getItem("cart");
+      const cart = storedCart ? JSON.parse(storedCart) : [];
+      const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+      setCartQuantity(totalQuantity);
+    } catch (error) {
+      console.error("Erro ao calcular a quantidade do carrinho:", error);
+    }
+  };
+
+  useEffect(() => {
+    updateCartQuantity();
+  }, [cartQuantity]);
+
 
   // Filtrar produtos relacionados (excluindo o produto atual)
   const relatedProducts = productsData.filter((item) => item.id !== Number(id));
@@ -75,6 +92,34 @@ const ProductDetail = () => {
   // Calcular preço total baseado na quantidade
   const totalPrice = product.price * quantity;
 
+  const addToCart = async () => {
+    try {
+      const storedCart = await AsyncStorage.getItem("cart");
+      let cart = storedCart ? JSON.parse(storedCart) : [];
+
+      const existingIndex = cart.findIndex((item) => item.id === product.id);
+      if (existingIndex !== -1) {
+        cart[existingIndex].quantity += quantity;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: quantity,
+        });
+      }
+
+      await AsyncStorage.setItem("cart", JSON.stringify(cart));
+      alert("Produto adicionado ao carrinho!");
+      updateCartQuantity(); // Atualiza a quantidade do carrinho
+    } catch (error) {
+      console.error("Erro ao adicionar ao carrinho:", error);
+      alert("Erro ao adicionar ao carrinho.");
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -111,7 +156,7 @@ const ProductDetail = () => {
           </View>
 
           {/* Mais Informações */}
-          <Text style={styles.moreInfoText}>1L </Text>
+          <Text style={styles.moreInfoText}>Código: </Text>
 
           {/* Botão para Informações Adicionais */}
           <TouchableOpacity
@@ -163,7 +208,7 @@ const ProductDetail = () => {
       {/* Footer fixado sobre a seção */}
       <View style={styles.footer}>
         <Text style={styles.price}>R$ {totalPrice.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.addToCartButton}>
+        <TouchableOpacity style={styles.addToCartButton} onPress={addToCart} >
           <Text style={styles.addToCartText}>Adicionar ao Carrinho</Text>
         </TouchableOpacity>
       </View>

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
 
 interface CartItem {
   id: number;
   name: string;
   price: number;
   quantity: number;
+  image: string; // Adicionando URL da imagem
 }
 
 const Carrinho = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    // Carregar os itens do carrinho do AsyncStorage quando o componente é montado
     const loadCart = async () => {
       try {
         const storedCart = await AsyncStorage.getItem("cart");
@@ -30,7 +29,6 @@ const Carrinho = () => {
     loadCart();
   }, []);
 
-  // Atualiza o AsyncStorage sempre que o carrinho é alterado
   useEffect(() => {
     const saveCart = async () => {
       try {
@@ -65,34 +63,49 @@ const Carrinho = () => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   return (
     <View style={styles.container}>
       {cartItems.length === 0 ? (
-        <Text style={styles.emptyCartText}>Seu carrinho está vazio..</Text>
+        <Text style={styles.emptyCartText}>Seu carrinho está vazio...</Text>
       ) : (
         <FlatList
           data={cartItems}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.cartItem}>
+              <Image
+                source={{ uri: item.image }}
+                style={styles.itemImage}
+              />
               <View style={styles.itemInfo}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
               </View>
-              <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={() => decrementQuantity(item.id)}>
-                  <MaterialCommunityIcons name="minus" size={20} color="#1E0175" />
-                </TouchableOpacity>
-                <Text style={styles.quantity}>{item.quantity}</Text>
-                <TouchableOpacity onPress={() => incrementQuantity(item.id)}>
-                  <MaterialCommunityIcons name="plus" size={20} color="#1E0175" />
+              <View style={styles.actionsContainer}>
+                <View style={styles.quantityContainer}>
+                  <TouchableOpacity
+                    onPress={() => decrementQuantity(item.id)}
+                    style={styles.quantityButton}
+                  >
+                    <MaterialCommunityIcons name="minus" size={20} color="#fff" />
+                  </TouchableOpacity>
+                  <Text style={styles.quantity}>{item.quantity}</Text>
+                  <TouchableOpacity
+                    onPress={() => incrementQuantity(item.id)}
+                    style={styles.quantityButton}
+                  >
+                    <MaterialCommunityIcons name="plus" size={20} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
+                  <MaterialCommunityIcons name="delete" size={24} color="red" />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
-                <MaterialCommunityIcons name="delete" size={20} color="red" />
-              </TouchableOpacity>
             </View>
           )}
         />
@@ -113,46 +126,66 @@ const Carrinho = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#f4f4f4",
     padding: 20,
   },
   emptyCartText: {
     fontSize: 18,
-    color: "#666",
+    color: "#888",
     textAlign: "center",
     marginTop: 50,
   },
   cartItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "white",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 15,
     padding: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
   },
+  itemImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    marginRight: 15,
+    resizeMode: "contain"
+  },
   itemInfo: {
     flex: 1,
   },
   itemName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#333",
+    marginBottom: 5,
   },
   itemPrice: {
     fontSize: 14,
-    color: "#666",
+    color: "#777",
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: 10,
+  },
+  quantityButton: {
+    backgroundColor: "#1E0175",
+    padding: 5,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   quantity: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     marginHorizontal: 10,
   },
   removeButton: {
@@ -161,32 +194,32 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   footer: {
-    marginTop: 20,
     backgroundColor: "#fff",
-    padding: 10,
     borderRadius: 10,
+    padding: 15,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
     alignItems: "center",
+    marginTop: 20,
   },
   totalPrice: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "#333",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   checkoutButton: {
     backgroundColor: "#1E0175",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
   },
   checkoutText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });
 

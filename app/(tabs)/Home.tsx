@@ -7,8 +7,6 @@ import BannerSlider from "../../src/components/BannerSlider"; // Slide de banner
 import CategoryCard from "../../src/components/CategoryCard"; // Componente de categorias
 
 export default function Index({ navigation }) {
-    // Obtendo os produtos do contexto
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -35,7 +33,7 @@ export default function Index({ navigation }) {
 
                 {/* Produtos */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Mais Vendidos</Text>
+                    <Text style={styles.sectionTitle}>Nossos Produtos</Text>
                     <FlatList
                         data={productsData}
                         renderItem={({ item }) => (

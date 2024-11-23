@@ -28,7 +28,7 @@ export default function Layout() {
                         />
                     ),
 
-                    // Ícone do carrinho (lado direito)
+                    //Ícone do carrinho (lado direito)
                     headerRight: () => (
                         <MaterialCommunityIcons
                             name="cart"

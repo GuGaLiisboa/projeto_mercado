@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
-      <Image source={{ uri: product.image }} style={styles.image} />
+      <Image source={{uri: product.image}} style={styles.image} />
       <Text style={styles.name}>{product.name}</Text>
       <Text style={styles.price}>R$ {product.price.toFixed(2)}</Text>
     </TouchableOpacity>
