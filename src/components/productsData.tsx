@@ -58,8 +58,15 @@ export default [
     {
         id: 9,
         name: "Peito de Frango Natto 1Kg",
-        price: 15.00,
+        price: 19.20,
         description: "Peito de Frango Congelado Natto 1Kg",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/9.webp",
+    },
+    {
+        id: 10,
+        name: "Amaciante Downy Concentrado Brisa de Verão 500ml",
+        price: 12.65,
+        description: "O Amaciante Downy Concentrado Brisa de Verão é perfeito para manter suas roupas com aquele perfume gostoso por mais tempo. O seu Downy azul deixará as roupas cheirosas o dia todo, graças a sua fórmula com cápsulas de perfume que liberam uma fragrância deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
     },
 ];

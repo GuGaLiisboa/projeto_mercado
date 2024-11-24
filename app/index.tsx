@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../scripts/firebase-config";
 import { get, ref } from 'firebase/database';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { syncProductsWithFirebase } from "@/src/components/syncProducts";
 
 export interface InputHandle {
   focusOnError: () => void;
@@ -24,6 +24,11 @@ export default function Index() {
 
   const emailInput = useRef<InputHandle>(null);
   const senhaInput = useRef<InputHandle>(null);
+
+  useEffect(() => {
+    // Sincronizar produtos ao iniciar o app
+    syncProductsWithFirebase();
+  }, []);
 
   useEffect(() => {
     emailInput.current?.resetError();
