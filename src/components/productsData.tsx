@@ -5,6 +5,9 @@ export default [
         price: 10.50,
         description: "Refrigerante Coca-Cola 2L",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/1.webp",
+        marca: "Coca-Cola",
+        categoria: "Bebidas",
+        unidade: "Litros"
     },
     {
         id: 2,
@@ -19,6 +22,9 @@ export default [
         price: 2.49,
         description: "Sabonete Dove Original 90g",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/3.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 4,
@@ -26,6 +32,9 @@ export default [
         price: 3.00,
         description: "Tomate Fresco (1kg)",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/4.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 5,
@@ -33,6 +42,9 @@ export default [
         price: 23.50,
         description: "1L",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/5.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 6,
@@ -40,6 +52,9 @@ export default [
         price: 4.00,
         description: "O Leite Integral Piracanjuba é uma opção saborosa e nutritiva, perfeito para o dia a dia. Rico em cálcio e vitaminas, é ideal para acompanhar cafés, preparar sobremesas ou consumir puro. Embalagem prática e segura com tecnologia de longa vida. Qualidade garantida por uma das marcas mais tradicionais do Brasil.",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/6.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 7,
@@ -47,6 +62,9 @@ export default [
         price: 8.00,
         description: "Leite em Pó Camponesa Integral 400g",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/7.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 8,
@@ -54,6 +72,9 @@ export default [
         price: 11.00,
         description: "Aplique o produto nas superfícies a serem limpas e, em seguida passe um pano ou esponja macia. Para sujeiras mais difíceis, deixar o produto agir por alguns instantes.",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/8.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 9,
@@ -61,6 +82,9 @@ export default [
         price: 19.20,
         description: "Peito de Frango Congelado Natto 1Kg",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/9.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
     {
         id: 10,
@@ -68,5 +92,8 @@ export default [
         price: 12.65,
         description: "O Amaciante Downy Concentrado Brisa de Verão é perfeito para manter suas roupas com aquele perfume gostoso por mais tempo. O seu Downy azul deixará as roupas cheirosas o dia todo, graças a sua fórmula com cápsulas de perfume que liberam uma fragrância deliciosa a cada toque.",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "",
+        categoria: "",
+        unidade: ""
     },
 ];

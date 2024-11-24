@@ -62,7 +62,6 @@ export default function Index() {
       return;
     }
 
-
     Keyboard.dismiss();
 
     signInWithEmailAndPassword(auth, email, password)

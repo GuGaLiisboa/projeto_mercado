@@ -17,7 +17,7 @@ export async function syncProductsWithFirebase() {
 
     // Iterar sobre os produtos no productsData
     for (const product of productsData) {
-      const { id, name, price, description, image } = product;
+      const { id, name, price, description, image, marca, categoria, unidade } = product;
 
       // Verificar se o produto já existe no Firebase
       if (
@@ -25,7 +25,10 @@ export async function syncProductsWithFirebase() {
         firebaseProducts[id].name === name &&
         firebaseProducts[id].price === price &&
         firebaseProducts[id].description === description &&
-        firebaseProducts[id].image === image
+        firebaseProducts[id].image === image &&
+        firebaseProducts[id].marca == marca &&
+        firebaseProducts[id].categoria == categoria &&
+        firebaseProducts[id].unidade == unidade
       ) {
         // Produto já está sincronizado
         alreadySyncedCount++;

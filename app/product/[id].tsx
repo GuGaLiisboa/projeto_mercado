@@ -80,7 +80,7 @@ const ProductDetail = () => {
 
   // Função para incrementar a quantidade
   const increment = () => {
-    if(quantity < 999) {
+    if(quantity < 99) {
       setQuantity(quantity + 1);
     } else {
       alert("Quantidade máxima atingida!");
@@ -172,7 +172,7 @@ const ProductDetail = () => {
           </View>
 
           {/* Mais Informações */}
-          <Text style={styles.moreInfoText}>Código: </Text>
+          <Text style={styles.moreInfoText}>Código: {product.id}</Text>
 
           {/* Botão para Informações Adicionais */}
           <TouchableOpacity
@@ -198,9 +198,9 @@ const ProductDetail = () => {
 
               <Text style={styles.specificationsTitle}>Especificações</Text>
               <View style={styles.specificationsContainer}>
-                <Text style={styles.specificationItem}>Tamanho: NULL</Text>
-                <Text style={styles.specificationItem}>Cor: NULL</Text>
-                <Text style={styles.specificationItem}>Peso: NULL</Text>
+                <Text style={styles.specificationItem}>Marca: {product.marca}</Text>
+                <Text style={styles.specificationItem}>Categoria: {product.categoria}</Text>
+                <Text style={styles.specificationItem}>Unidade: {product.unidade}</Text>
               </View>
             </View>
           )}
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     flex: 1,
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    marginLeft: 3
   },
   quantityButton: {
     paddingVertical: 2,
