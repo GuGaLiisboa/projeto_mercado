@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ref, set, get, update, remove } from "firebase/database";
+import { ref, get, set, update, remove } from "firebase/database";
 import { db } from "../scripts/firebase-config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface CartItem {
+interface Product {
   id: number;
   name: string;
   price: number;
-  quantity: number;
   image: string;
+  marca: string;
+}
+
+interface CartItem {
+  id: number;
+  quantity: number;
 }
 
 const Carrinho = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<(CartItem & Product)[]>([]);
   const [userUid, setUserUid] = useState<string | null>(null);
 
   const FRETE = 5;
@@ -36,10 +41,20 @@ const Carrinho = () => {
     const loadCart = async () => {
       try {
         const cartRef = ref(db, `user/${userUid}/cart`);
-        const snapshot = await get(cartRef);
+        const productsRef = ref(db, `products`);
+        const cartSnapshot = await get(cartRef);
+        const productsSnapshot = await get(productsRef);
 
-        if (snapshot.exists()) {
-          setCartItems(snapshot.val());
+        if (cartSnapshot.exists() && productsSnapshot.exists()) {
+          const cart: CartItem[] = cartSnapshot.val();
+          const products: Record<string, Product> = productsSnapshot.val();
+
+          // Mapear os IDs do carrinho para os produtos completos
+          const fullCart = cart.map((item) => ({
+            ...item,
+            ...products[item.id], // Mesclar os dados do produto com a quantidade
+          }));
+          setCartItems(fullCart);
         } else {
           setCartItems([]);
         }
@@ -58,7 +73,8 @@ const Carrinho = () => {
     const saveCart = async () => {
       try {
         const cartRef = ref(db, `user/${userUid}/cart`);
-        await set(cartRef, cartItems);
+        const cartToSave = cartItems.map(({ id, quantity }) => ({ id, quantity }));
+        await set(cartRef, cartToSave);
       } catch (error) {
         console.error("Erro ao salvar o carrinho no Firebase:", error);
       }
@@ -67,6 +83,7 @@ const Carrinho = () => {
     saveCart();
   }, [cartItems, userUid]);
 
+  // Funções de manipulação do carrinho
   const incrementQuantity = (id: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -87,12 +104,12 @@ const Carrinho = () => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
+  // Cálculo do total
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  // Verificar o valor do frete
   const freteMessage = totalPrice >= FRETE_GRATIS_LIMITE ? "Frete Grátis!" : `Frete: R$ ${FRETE.toFixed(2)}`;
   const totalWithFrete = totalPrice >= FRETE_GRATIS_LIMITE ? totalPrice : totalPrice + FRETE;
 
@@ -108,21 +125,29 @@ const Carrinho = () => {
             <View style={styles.cartItem}>
               <Image source={{ uri: item.image }} style={styles.itemImage} />
               <View style={styles.itemInfo}>
-                <Text style={styles.brandName}>Nome da Marca</Text>
+              <Text style={styles.brandName}>{item.marca || "Marca não disponível"}</Text>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.subHeading}>Valor Total:</Text>
-                <Text style={styles.itemPrice}>R$ {(item.price * item.quantity).toFixed(2)}</Text>
+                <Text style={styles.itemPrice}>
+                  R$ {(item.price * item.quantity).toFixed(2)}
+                </Text>
               </View>
               <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
                 <MaterialCommunityIcons name="delete" size={24} color="red" />
               </TouchableOpacity>
               <View style={styles.quantityContainer}>
                 <View style={styles.quantityActions}>
-                  <TouchableOpacity onPress={() => decrementQuantity(item.id)} style={styles.quantityButton}>
+                  <TouchableOpacity
+                    onPress={() => decrementQuantity(item.id)}
+                    style={styles.quantityButton}
+                  >
                     <MaterialCommunityIcons name="minus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                   <Text style={styles.quantity}>{item.quantity}</Text>
-                  <TouchableOpacity onPress={() => incrementQuantity(item.id)} style={styles.quantityButton}>
+                  <TouchableOpacity
+                    onPress={() => incrementQuantity(item.id)}
+                    style={styles.quantityButton}
+                  >
                     <MaterialCommunityIcons name="plus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                 </View>

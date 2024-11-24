@@ -80,7 +80,7 @@ const ProductDetail = () => {
 
   // Função para incrementar a quantidade
   const increment = () => {
-    if(quantity < 99) {
+    if (quantity < 99) {
       setQuantity(quantity + 1);
     } else {
       alert("Quantidade máxima atingida!");
@@ -94,9 +94,6 @@ const ProductDetail = () => {
     }
   };
 
-  // Calcular preço total baseado na quantidade
-  const totalPrice = product.price * quantity;
-
   const addToCart = async () => {
     try {
       const userUid = await AsyncStorage.getItem("userUid");
@@ -104,12 +101,12 @@ const ProductDetail = () => {
         alert("Usuário não encontrado. Faça login novamente.");
         return;
       }
-  
+
       // Recuperar o carrinho do Firebase
       const cartRef = ref(db, `user/${userUid}/cart`);
       const snapshot = await get(cartRef);
       let cart = snapshot.exists() ? snapshot.val() : [];
-  
+
       // Verificar se o produto já está no carrinho
       const existingIndex = cart.findIndex((item) => item.id === product.id);
       if (existingIndex !== -1) {
@@ -117,16 +114,13 @@ const ProductDetail = () => {
       } else {
         cart.push({
           id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
           quantity: quantity,
         });
       }
-  
+
       // Salvar o carrinho atualizado no Firebase
       await set(cartRef, cart);
-  
+
       alert("Produto adicionado ao carrinho!");
       updateCartQuantity(); // Atualizar a quantidade do carrinho local
     } catch (error) {
@@ -134,6 +128,7 @@ const ProductDetail = () => {
       alert("Erro ao adicionar ao carrinho.");
     }
   };
+
 
 
   return (
@@ -223,7 +218,7 @@ const ProductDetail = () => {
 
       {/* Footer fixado sobre a seção */}
       <View style={styles.footer}>
-        <Text style={styles.price}>R$ {totalPrice.toFixed(2)}</Text>
+        <Text style={styles.price}>R$ {product.price.toFixed(2)}</Text>
         <TouchableOpacity style={styles.addToCartButton} onPress={addToCart} >
           <Text style={styles.addToCartText}>Adicionar ao Carrinho</Text>
         </TouchableOpacity>

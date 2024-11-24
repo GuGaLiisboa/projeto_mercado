@@ -18,13 +18,13 @@ export default [
     },
     {
         id: 3,
-        name: "Sabonete Dove",
-        price: 2.49,
+        name: "Sabonete Dove Original 90g",
+        price: 2.70,
         description: "Sabonete Dove Original 90g",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/3.webp",
-        marca: "",
-        categoria: "",
-        unidade: ""
+        marca: "Dove",
+        categoria: "Higiene",
+        unidade: "Gramas"
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ export default [
     {
         id: 5,
         name: "Pote de Açaí Grande",
-        price: 23.50,
+        price: 24,
         description: "1L",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/5.webp",
         marca: "",
