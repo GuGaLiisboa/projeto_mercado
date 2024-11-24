@@ -2,65 +2,86 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ref, set, get, update, remove } from "firebase/database";
+import { db } from "../scripts/firebase-config";
 
 interface CartItem {
   id: number;
   name: string;
   price: number;
   quantity: number;
-  image: string; // Adicionando URL da imagem
+  image: string;
 }
 
 const Carrinho = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [userUid, setUserUid] = useState<string | null>(null);
 
+  // Recuperar o UID do usuário
   useEffect(() => {
+    const loadUserUid = async () => {
+      const uid = await AsyncStorage.getItem("userUid");
+      setUserUid(uid);
+    };
+    loadUserUid();
+  }, []);
+
+  // Carregar o carrinho do Firebase
+  useEffect(() => {
+    if (!userUid) return;
+
     const loadCart = async () => {
       try {
-        const storedCart = await AsyncStorage.getItem("cart");
-        if (storedCart) {
-          setCartItems(JSON.parse(storedCart));
+        const cartRef = ref(db, `user/${userUid}/cart`);
+        const snapshot = await get(cartRef);
+
+        if (snapshot.exists()) {
+          setCartItems(snapshot.val());
+        } else {
+          setCartItems([]);
         }
       } catch (error) {
-        console.error("Erro ao carregar o carrinho:", error);
+        console.error("Erro ao carregar o carrinho do Firebase:", error);
       }
     };
 
     loadCart();
-  }, []);
+  }, [userUid]);
 
+  // Atualizar o carrinho no Firebase sempre que ele mudar
   useEffect(() => {
+    if (!userUid) return;
+
     const saveCart = async () => {
       try {
-        await AsyncStorage.setItem("cart", JSON.stringify(cartItems));
+        const cartRef = ref(db, `user/${userUid}/cart`);
+        await set(cartRef, cartItems);
       } catch (error) {
-        console.error("Erro ao salvar o carrinho:", error);
+        console.error("Erro ao salvar o carrinho no Firebase:", error);
       }
     };
 
     saveCart();
-  }, [cartItems]);
+  }, [cartItems, userUid]);
 
   const incrementQuantity = (id: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: Math.min(item.quantity + 1, 999) } : item
       )
     );
   };
 
   const decrementQuantity = (id: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
       )
     );
   };
 
   const removeItem = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const totalPrice = cartItems.reduce(
@@ -78,33 +99,39 @@ const Carrinho = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.cartItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.itemImage}
-              />
+              <Image source={{ uri: item.image }} style={styles.itemImage} />
               <View style={styles.itemInfo}>
+                <Text style={styles.brandName}>Nome da Marca</Text>
                 <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
+
+                {/* Título acima do preço */}
+                <Text style={styles.subHeading}>Valor Total:</Text>
+                <Text style={styles.itemPrice}>R$ {(item.price * item.quantity).toFixed(2)}
+                </Text>
               </View>
-              <View style={styles.actionsContainer}>
-                <View style={styles.quantityContainer}>
+
+              {/* Botão de remover */}
+              <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
+                <MaterialCommunityIcons name="delete" size={24} color="red" />
+              </TouchableOpacity>
+
+              {/* Botões de quantidade */}
+              <View style={styles.quantityContainer}>
+                <View style={styles.quantityActions}>
                   <TouchableOpacity
                     onPress={() => decrementQuantity(item.id)}
                     style={styles.quantityButton}
                   >
-                    <MaterialCommunityIcons name="minus" size={20} color="#fff" />
+                    <MaterialCommunityIcons name="minus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                   <Text style={styles.quantity}>{item.quantity}</Text>
                   <TouchableOpacity
                     onPress={() => incrementQuantity(item.id)}
                     style={styles.quantityButton}
                   >
-                    <MaterialCommunityIcons name="plus" size={20} color="#fff" />
+                    <MaterialCommunityIcons name="plus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
-                  <MaterialCommunityIcons name="delete" size={24} color="red" />
-                </TouchableOpacity>
               </View>
             </View>
           )}
@@ -127,7 +154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
-    padding: 20,
+    padding: 10,
   },
   emptyCartText: {
     fontSize: 18,
@@ -146,40 +173,61 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+    position: "relative",
   },
   itemImage: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     borderRadius: 5,
     marginRight: 15,
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
   itemInfo: {
     flex: 1,
+    paddingRight: 50,
+  },
+  brandName: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#888",
+    marginBottom: 3,
   },
   itemName: {
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
-    marginBottom: 5,
+    marginBottom: 10,
+  },
+  subHeading: {
+    fontSize: 12,
+    color: "#888",
+    marginBottom: 2,
   },
   itemPrice: {
-    fontSize: 14,
-    color: "#777",
+    fontSize: 16,
+    color: "#1E0175",
+    fontWeight: "bold",
   },
-  actionsContainer: {
-    flexDirection: "row",
+  removeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    justifyContent: "center",
     alignItems: "center",
   },
   quantityContainer: {
+    position: "absolute",
+    bottom: 7,
+    right: 7,
+    alignItems: "flex-end",
+  },
+  quantityActions: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 10,
+    marginTop: 5, // Espaçamento entre título e ações
   },
   quantityButton: {
-    backgroundColor: "#1E0175",
     padding: 5,
-    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -187,11 +235,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginHorizontal: 10,
-  },
-  removeButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 5,
   },
   footer: {
     backgroundColor: "#fff",

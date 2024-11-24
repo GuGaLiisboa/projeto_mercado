@@ -69,6 +69,7 @@ export default function Layout() {
         options={{
           headerTitle: "Categorias",
           headerTitleAlign: "center",
+          headerTintColor: "white",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="menu"
@@ -85,6 +86,7 @@ export default function Layout() {
         options={{
           headerTitle: "Favoritos",
           headerTitleAlign: "center",
+          headerTintColor: "white",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="heart"
@@ -99,8 +101,9 @@ export default function Layout() {
       <Tabs.Screen
         name="Usuario"
         options={{
-          headerTitle: "Usuários",
+          headerTitle: "Minha Conta",
           headerTitleAlign: "center",
+          headerTintColor: "white",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="account"

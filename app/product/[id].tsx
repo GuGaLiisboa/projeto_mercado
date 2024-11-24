@@ -99,9 +99,18 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      const storedCart = await AsyncStorage.getItem("cart");
-      let cart = storedCart ? JSON.parse(storedCart) : [];
-
+      const userUid = await AsyncStorage.getItem("userUid");
+      if (!userUid) {
+        alert("Usuário não encontrado. Faça login novamente.");
+        return;
+      }
+  
+      // Recuperar o carrinho do Firebase
+      const cartRef = ref(db, `user/${userUid}/cart`);
+      const snapshot = await get(cartRef);
+      let cart = snapshot.exists() ? snapshot.val() : [];
+  
+      // Verificar se o produto já está no carrinho
       const existingIndex = cart.findIndex((item) => item.id === product.id);
       if (existingIndex !== -1) {
         cart[existingIndex].quantity += quantity;
@@ -114,10 +123,12 @@ const ProductDetail = () => {
           quantity: quantity,
         });
       }
-
-      await AsyncStorage.setItem("cart", JSON.stringify(cart));
+  
+      // Salvar o carrinho atualizado no Firebase
+      await set(cartRef, cart);
+  
       alert("Produto adicionado ao carrinho!");
-      updateCartQuantity(); // Atualiza a quantidade do carrinho
+      updateCartQuantity(); // Atualizar a quantidade do carrinho local
     } catch (error) {
       console.error("Erro ao adicionar ao carrinho:", error);
       alert("Erro ao adicionar ao carrinho.");

@@ -29,7 +29,7 @@ export default [
     },
     {
         id: 5,
-        name: "Pote de Açaí",
+        name: "Pote de Açaí Grande",
         price: 23.50,
         description: "1L",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/5.webp",
