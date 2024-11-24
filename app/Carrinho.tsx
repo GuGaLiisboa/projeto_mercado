@@ -17,6 +17,9 @@ const Carrinho = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [userUid, setUserUid] = useState<string | null>(null);
 
+  const FRETE = 5;
+  const FRETE_GRATIS_LIMITE = 100;
+
   // Recuperar o UID do usuário
   useEffect(() => {
     const loadUserUid = async () => {
@@ -89,6 +92,10 @@ const Carrinho = () => {
     0
   );
 
+  // Verificar o valor do frete
+  const freteMessage = totalPrice >= FRETE_GRATIS_LIMITE ? "Frete Grátis!" : `Frete: R$ ${FRETE.toFixed(2)}`;
+  const totalWithFrete = totalPrice >= FRETE_GRATIS_LIMITE ? totalPrice : totalPrice + FRETE;
+
   return (
     <View style={styles.container}>
       {cartItems.length === 0 ? (
@@ -103,32 +110,19 @@ const Carrinho = () => {
               <View style={styles.itemInfo}>
                 <Text style={styles.brandName}>Nome da Marca</Text>
                 <Text style={styles.itemName}>{item.name}</Text>
-
-                {/* Título acima do preço */}
                 <Text style={styles.subHeading}>Valor Total:</Text>
-                <Text style={styles.itemPrice}>R$ {(item.price * item.quantity).toFixed(2)}
-                </Text>
+                <Text style={styles.itemPrice}>R$ {(item.price * item.quantity).toFixed(2)}</Text>
               </View>
-
-              {/* Botão de remover */}
               <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.removeButton}>
                 <MaterialCommunityIcons name="delete" size={24} color="red" />
               </TouchableOpacity>
-
-              {/* Botões de quantidade */}
               <View style={styles.quantityContainer}>
                 <View style={styles.quantityActions}>
-                  <TouchableOpacity
-                    onPress={() => decrementQuantity(item.id)}
-                    style={styles.quantityButton}
-                  >
+                  <TouchableOpacity onPress={() => decrementQuantity(item.id)} style={styles.quantityButton}>
                     <MaterialCommunityIcons name="minus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                   <Text style={styles.quantity}>{item.quantity}</Text>
-                  <TouchableOpacity
-                    onPress={() => incrementQuantity(item.id)}
-                    style={styles.quantityButton}
-                  >
+                  <TouchableOpacity onPress={() => incrementQuantity(item.id)} style={styles.quantityButton}>
                     <MaterialCommunityIcons name="plus" size={25} color="#1E0175" />
                   </TouchableOpacity>
                 </View>
@@ -140,10 +134,19 @@ const Carrinho = () => {
 
       {cartItems.length > 0 && (
         <View style={styles.footer}>
-          <Text style={styles.totalPrice}>Total: R$ {totalPrice.toFixed(2)}</Text>
-          <TouchableOpacity style={styles.checkoutButton}>
-            <Text style={styles.checkoutText}>Finalizar Compra</Text>
-          </TouchableOpacity>
+          <Text style={styles.totalItems}>Itens no carrinho: {cartItems.length}</Text>
+          <Text style={styles.totalPrice}>Total: R$ {totalWithFrete.toFixed(2)}</Text>
+          <Text style={[styles.incentiveText, { color: totalPrice >= FRETE_GRATIS_LIMITE ? "#1E0175" : "#888" }]}>
+            {freteMessage}
+          </Text>
+          <View style={styles.footerButtons}>
+            <TouchableOpacity style={styles.checkoutButton}>
+              <Text style={styles.checkoutText}>Finalizar Compra</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.continueShoppingButton}>
+              <Text style={styles.continueShoppingText}>Continuar Comprando</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
   quantityActions: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5, // Espaçamento entre título e ações
+    marginTop: 5,
   },
   quantityButton: {
     padding: 5,
@@ -247,22 +250,54 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  totalItems: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+  },
   totalPrice: {
     fontSize: 18,
     fontWeight: "700",
     color: "#333",
     marginBottom: 15,
   },
+  incentiveText: {
+    fontSize: 14,
+    color: "#1E0175",
+    fontWeight: "600",
+    marginBottom: 15,
+  },
+  footerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
   checkoutButton: {
     backgroundColor: "#1E0175",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,
+    flex: 1,
+    marginRight: 10,
   },
   checkoutText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
+  },
+  continueShoppingButton: {
+    backgroundColor: "#f4f4f4",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    flex: 1,
+  },
+  continueShoppingText: {
+    color: "#1E0175",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 
