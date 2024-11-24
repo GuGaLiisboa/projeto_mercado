@@ -7,7 +7,11 @@ export default function Layout() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para armazenar o valor da pesquisa
 
   return (
-    <Tabs screenOptions={{ headerStyle: { backgroundColor: "#1E0175" } }}>
+    <Tabs screenOptions={{ 
+      headerStyle: { backgroundColor: "#1E0175" },
+      tabBarInactiveTintColor: 'white', 
+      tabBarActiveTintColor: '#00BCD4', 
+      tabBarStyle: {backgroundColor: '#1E0175'}}}>
       {/* Tela Home */}
       <Tabs.Screen
         name="Home"
@@ -64,7 +68,6 @@ export default function Layout() {
         name="Categorias"
         options={{
           headerTitle: "Categorias",
-          headerTintColor: "white",
           headerTitleAlign: "center",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -81,7 +84,6 @@ export default function Layout() {
         name="Favoritos"
         options={{
           headerTitle: "Favoritos",
-          headerTintColor: "white",
           headerTitleAlign: "center",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -98,7 +100,6 @@ export default function Layout() {
         name="Usuario"
         options={{
           headerTitle: "Usuários",
-          headerTintColor: "white",
           headerTitleAlign: "center",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
