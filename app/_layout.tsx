@@ -16,10 +16,13 @@ export default function RootLayout() {
 
       <Stack.Screen options={{ headerShown: false }} name="product" />
 
+      <Stack.Screen options={{ headerShown: false }} name="category" />
+
       {/* Carrinho de compras */}
       <Stack.Screen name="Carrinho" options={{ 
         headerShown: true,
         headerTitle: "Carrinho",
+        headerTitleAlign: 'center',
         headerTintColor: 'white',
         headerBackVisible: false,
 

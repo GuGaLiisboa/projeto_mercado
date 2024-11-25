@@ -102,6 +102,7 @@ export default function Layout() {
         name="Usuario"
         options={{
           headerTitle: "Minha Conta",
+          title: 'Usuário',
           headerTitleAlign: "center",
           headerTintColor: "white",
           tabBarIcon: ({ color }) => (

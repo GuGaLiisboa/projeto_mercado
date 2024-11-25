@@ -1,11 +1,13 @@
 import { usePathname, useRouter } from "expo-router";
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import productsData from "../../src/components/productsData";
+import categoriesData from "@/src/components/categoriesData";
 import { useState, useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { db } from "../../scripts/firebase-config";
 import { ref, set, get, remove } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const ProductDetail = () => {
   const router = useRouter();
@@ -15,8 +17,27 @@ const ProductDetail = () => {
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false); // Estado para menu oculto
   const [quantity, setQuantity] = useState(1); // Estado para a quantidade do produto
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [categoryName, setCategoryName] = useState("");
 
   const product = productsData.find((item) => item.id === Number(id));
+
+  // Função para buscar o nome da categoria pelo id
+  const getCategoryNameById = (categoryId: number | null) => {
+    if (categoryId === null || categoryId === undefined) {
+      return "Categoria não disponível"; // Ou outro valor default
+    }
+
+    const category = categoriesData.find((cat) => cat.id === categoryId);
+    return category ? category.name : "Categoria não encontrada";
+  };
+
+  useEffect(() => {
+    if (product) {
+      const categoryName = getCategoryNameById(product.categoria); 
+      setCategoryName(categoryName); 
+    }
+  }, [product]);
+
 
   const updateCartQuantity = async () => {
     try {
@@ -127,8 +148,6 @@ const ProductDetail = () => {
     }
   };
 
-
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -192,7 +211,7 @@ const ProductDetail = () => {
               <Text style={styles.specificationsTitle}>Especificações</Text>
               <View style={styles.specificationsContainer}>
                 <Text style={styles.specificationItem}>Marca: {product.marca}</Text>
-                <Text style={styles.specificationItem}>Categoria: {product.categoria}</Text>
+                <Text style={styles.specificationItem}>Categoria: {categoryName}</Text>
                 <Text style={styles.specificationItem}>Unidade: {product.unidade}</Text>
               </View>
             </View>

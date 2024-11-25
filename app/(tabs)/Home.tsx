@@ -58,16 +58,17 @@ const styles = StyleSheet.create({
         backgroundColor: "#f5f5f5",
     },
     section: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingVertical: 0,
+        paddingHorizontal: 10,
+        marginTop: 15
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: "bold",
-        marginBottom: 10,
+        marginBottom: 10
     },
     categoryList: {
-        paddingVertical: 5,
+        paddingVertical: 0,
     },
     productList: {
         justifyContent: "space-between",

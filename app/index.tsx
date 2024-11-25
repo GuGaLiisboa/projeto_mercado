@@ -9,6 +9,7 @@ import { auth, db } from "../scripts/firebase-config";
 import { get, ref } from 'firebase/database';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { syncProductsWithFirebase } from "@/src/components/syncProducts";
+import { syncCategoriesWithFirebase } from "@/src/components/syncCategories";
 
 export interface InputHandle {
   focusOnError: () => void;
@@ -28,6 +29,7 @@ export default function Index() {
   useEffect(() => {
     // Sincronizar produtos ao iniciar o app
     syncProductsWithFirebase();
+    syncCategoriesWithFirebase();
   }, []);
 
   useEffect(() => {
