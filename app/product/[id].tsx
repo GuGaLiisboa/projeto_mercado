@@ -57,18 +57,16 @@ const ProductDetail = () => {
 
     const favoriteRef = ref(db, `user/${userUid}/favoritos/${id}`);
     if (isFavorite) {
+      // Remover o produto dos favoritos
       await remove(favoriteRef);
       setIsFavorite(false);
     } else {
-      await set(favoriteRef, {
-        id: product.id,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-      });
+      // Adicionar apenas o ID do produto
+      await set(favoriteRef, true); // Salva apenas um valor simbólico, como "true"
       setIsFavorite(true);
     }
   };
+
 
   if (!product) {
     return (
