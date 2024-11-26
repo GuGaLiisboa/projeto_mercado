@@ -18,8 +18,10 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1); // Estado para a quantidade do produto
   const [cartQuantity, setCartQuantity] = useState(0);
   const [categoryName, setCategoryName] = useState("");
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const product = productsData.find((item) => item.id === Number(id));
+
 
   // Função para buscar o nome da categoria pelo id
   const getCategoryNameById = (categoryId: number | null) => {
@@ -33,8 +35,8 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      const categoryName = getCategoryNameById(product.categoria); 
-      setCategoryName(categoryName); 
+      const categoryName = getCategoryNameById(product.categoria);
+      setCategoryName(categoryName);
     }
   }, [product]);
 
@@ -55,8 +57,35 @@ const ProductDetail = () => {
   }, [cartQuantity]);
 
 
-  // Filtrar produtos relacionados (excluindo o produto atual)
-  const relatedProducts = productsData.filter((item) => item.id !== Number(id));
+  // Função para embaralhar um array
+  const shuffleArray = (array) => {
+    return array
+      .map((item) => ({ item, sort: Math.random() })) // Associa um número aleatório a cada item
+      .sort((a, b) => a.sort - b.sort) // Ordena os itens de forma aleatória
+      .map(({ item }) => item); // Retorna o array embaralhado
+  };
+
+  // Função para buscar produtos relacionados com base na categoria, limitando a 10 e embaralhando
+  const fetchRelatedProducts = (currentProduct) => {
+    if (!currentProduct || !currentProduct.categoria) return [];
+
+    // Filtrar produtos da mesma categoria, excluindo o produto atual
+    const filteredProducts = productsData.filter(
+      (item) => item.categoria === currentProduct.categoria && item.id !== currentProduct.id
+    );
+
+    // Embaralhar os produtos e limitar a 10
+    return shuffleArray(filteredProducts).slice(0, 10);
+  };
+
+  useEffect(() => {
+    if (product) {
+      const related = fetchRelatedProducts(product);
+      setRelatedProducts(related);
+    }
+  }, [product]);
+
+
   const userId = "demoUser";
 
   useEffect(() => {
@@ -219,17 +248,27 @@ const ProductDetail = () => {
 
           {/* Produtos relacionados */}
           <Text style={styles.relatedTitle}>Produtos Relacionados</Text>
-          <FlatList
-            data={relatedProducts}
-            horizontal
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity style={styles.relatedItem} onPress={() => router.push(`/product/${item.id}`)} >
-                <Image source={{ uri: item.image }} style={styles.relatedImage} />
-                <Text style={styles.relatedName}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
+          {relatedProducts.length > 0 ? (
+            <FlatList
+              data={relatedProducts}
+              horizontal
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.relatedItem}
+                  onPress={() => router.push(`/product/${item.id}`)}
+                >
+                  <Image source={{ uri: item.image }} style={styles.relatedImage} />
+                  <Text style={styles.relatedName}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          ) : (
+            <Text style={styles.noRelatedProducts}>
+              Não há produtos relacionados disponíveis.
+            </Text>
+          )}
+
         </View>
       </ScrollView>
 
@@ -382,6 +421,13 @@ const styles = StyleSheet.create({
     color: "#666",
     marginTop: 5,
     textAlign: 'center',
+  },
+  noRelatedProducts: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    marginTop: 10,
+    marginBottom: 20,
   },
   footer: {
     flexDirection: "row",

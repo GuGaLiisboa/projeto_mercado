@@ -99,4 +99,114 @@ export default [
         categoria: 6,
         unidade: "Mililitros"
     },
+    {
+        id: 11,
+        name: "Café maratá",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 12,
+        name: "Product test 1",
+        price: 5.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Teste",
+        categoria: 2,
+        unidade: "Gramas"
+    },
+    {
+        id: 13,
+        name: "Product test 2",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 14,
+        name: "Product test 3",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 15,
+        name: "Product test 4",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 16,
+        name: "Product test 5",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 17,
+        name: "Product test 6",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 18,
+        name: "Product test 7",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 19,
+        name: "Product test 8",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 20,
+        name: "Product test 9",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
+    {
+        id: 21,
+        name: "Product test 10",
+        price: 16.00,
+        description: "deliciosa a cada toque.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
+        marca: "Maratá",
+        categoria: 1,
+        unidade: "Gramas"
+    },
 ];
