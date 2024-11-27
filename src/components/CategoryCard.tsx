@@ -25,8 +25,8 @@ const CategoryCard = ({ category }) => {
 
 const styles = StyleSheet.create({
     card: {
-        width: 80, // Largura fixa para manter o quadrado
-        height: 80, // Altura fixa igual à largura
+        width: 80,
+        height: 80,
         borderRadius: 10,
         backgroundColor: "#fff",
         justifyContent: "center",
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     image: {
-        width: 40, // Ajuste proporcional
+        width: 40,
         height: 40,
         resizeMode: "contain",
         marginBottom: 5,
