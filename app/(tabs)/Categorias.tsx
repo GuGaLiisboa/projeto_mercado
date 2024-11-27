@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView, Text, FlatList, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import categoriesData from "../../src/components/categoriesData";
 import { useRouter } from "expo-router";
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     paddingHorizontal: 20,
-    marginHorizontal: 20
+    marginHorizontal: Platform.OS === "android" ? 0 : 20,
   },
   title: {
     fontSize: 18,

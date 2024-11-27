@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { router, Tabs } from "expo-router";
+import { useRouter, Tabs } from "expo-router";
 
 export default function Layout() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para armazenar o valor da pesquisa
+  const router = useRouter();
 
   return (
-    <Tabs screenOptions={{
+    <Tabs screenOptions={{ 
       headerStyle: { backgroundColor: "#1E0175" },
-      tabBarInactiveTintColor: 'white',
-      tabBarActiveTintColor: '#00BCD4',
-      tabBarStyle: { backgroundColor: '#1E0175' }
-    }}>
+      tabBarInactiveTintColor: 'white', 
+      tabBarActiveTintColor: '#00BCD4', 
+      tabBarStyle: {backgroundColor: '#1E0175'}}}>
       {/* Tela Home */}
       <Tabs.Screen
         name="Home"
@@ -35,7 +35,9 @@ export default function Layout() {
                   returnKeyType='search'
                   style={styles.searchInput}
                   onSubmitEditing={() => {
-                    console.log("Pesquisa: ", searchQuery); // Ação ao pressionar "Enter" ou "Buscar"
+                    if (searchQuery) {
+                      router.push(`/search/${encodeURIComponent(searchQuery)}`); // Navega para a página de resultados
+                    }
                   }}
                 />
               </View>
@@ -68,9 +70,6 @@ export default function Layout() {
       <Tabs.Screen
         name="Categorias"
         options={{
-          headerTitle: "Categorias",
-          headerTitleAlign: "center",
-          headerTintColor: "white",
           headerTitle: () => (
             <View style={styles.headerContainer}>
               {/* Campo de Pesquisa com Ícone de Lupa */}
@@ -89,7 +88,9 @@ export default function Layout() {
                   returnKeyType='search'
                   style={styles.searchInput}
                   onSubmitEditing={() => {
-                    console.log("Pesquisa: ", searchQuery); // Ação ao pressionar "Enter" ou "Buscar"
+                    if (searchQuery) {
+                      router.push(`/search/${encodeURIComponent(searchQuery)}`); // Navega para a página de resultados
+                    }
                   }}
                 />
               </View>
@@ -106,6 +107,8 @@ export default function Layout() {
               />
             </View>
           ),
+          headerTitleAlign: "center",
+          headerTintColor: "white",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="menu"
@@ -138,7 +141,6 @@ export default function Layout() {
         name="Usuario"
         options={{
           headerTitle: "Minha Conta",
-          title: 'Usuário',
           headerTitleAlign: "center",
           headerTintColor: "white",
           tabBarIcon: ({ color }) => (
@@ -160,6 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    paddingHorizontal: 10,
   },
   searchContainer: {
     flexDirection: "row",
@@ -180,8 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cartIcon: {
-    marginRight: 0,
-    marginLeft: 5,
-    marginBottom: 10
+    marginLeft: 10,
+    marginBottom: 10,
   },
 });
