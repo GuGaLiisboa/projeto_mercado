@@ -16,6 +16,9 @@ export default function Index({ navigation }) {
         .sort((a, b) => b.id - a.id)
         .slice(0, 22); // <= Altera a quantidade de produtos na pagina
 
+    // Limitando a quantidade de categorias na tela inicial
+    const limitedCategories = categoriesData.slice(0, 10);
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -39,7 +42,7 @@ export default function Index({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <FlatList
-                        data={categoriesData}
+                        data={limitedCategories} 
                         renderItem={({ item }) => (
                             <CategoryCard
                                 category={item}
