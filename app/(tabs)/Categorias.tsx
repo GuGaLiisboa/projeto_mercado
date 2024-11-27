@@ -1,23 +1,21 @@
 import React from "react";
-import { SafeAreaView, Text, FlatList, View, Image, StyleSheet, TouchableOpacity } from "react-native";
-
-// Exemplo de dados de categorias
-const categorias = [
-  { id: '1', nome: 'Frutas', imagem: 'https://via.placeholder.com/100' },
-  { id: '2', nome: 'Verduras', imagem: 'https://via.placeholder.com/100' },
-  { id: '3', nome: 'Carnes', imagem: 'https://via.placeholder.com/100' },
-  { id: '4', nome: 'Bebidas', imagem: 'https://via.placeholder.com/100' },
-  { id: '5', nome: 'Laticínios', imagem: 'https://via.placeholder.com/100' },
-];
+import { SafeAreaView, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import categoriesData from "../../src/components/categoriesData";
+import { useRouter } from "expo-router";
 
 export default function Categorias() {
+  const router = useRouter();
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.categoryContainer} onPress={() => { 
-      console.log(`Categoria ${item.nome} selecionada`);
-      // Aqui você pode navegar para uma tela de produtos dessa categoria
-    }}>
-      <Image source={{ uri: item.imagem }} style={styles.categoryImage} />
-      <Text style={styles.categoryName}>{item.nome}</Text>
+    <TouchableOpacity
+      style={styles.categoryContainer}
+      onPress={() => {
+        router.push(`/category/${item.id}`);
+        // Aqui você pode navegar para uma tela de produtos dessa categoria
+      }}
+    >
+      <Text style={styles.categoryName}>{item.name}</Text>
+      <Text style={styles.arrow}>{">"}</Text>
     </TouchableOpacity>
   );
 
@@ -25,10 +23,9 @@ export default function Categorias() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Categorias</Text>
       <FlatList
-        data={categorias}
+        data={categoriesData} // Usando os dados já existentes
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2} // Exibe as categorias em duas colunas
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.list}
       />
     </SafeAreaView>
@@ -40,39 +37,41 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     paddingHorizontal: 20,
+    marginHorizontal: 20
   },
   title: {
-    fontSize: 30,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1E0175',
-    marginVertical: 20,
-    textAlign: 'center',
+    marginVertical: 15,
+    textAlign: 'left',
   },
   list: {
     paddingBottom: 20,
   },
   categoryContainer: {
-    flex: 1,
+    flexDirection: "row",
     backgroundColor: 'white',
-    margin: 10,
-    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginVertical: 1, // Espaço entre os itens
+    borderRadius: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  categoryImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 10,
-    marginBottom: 10,
+    alignItems: "center",
   },
   categoryName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '300',
     color: '#333',
+    flex: 1, // Ocupa o espaço restante
+  },
+  arrow: {
+    fontSize: 18,
+    color: '#1E0175', // Cor da seta
+    fontWeight: 'bold',
   },
 });

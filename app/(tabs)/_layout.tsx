@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter, Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 
 export default function Layout() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para armazenar o valor da pesquisa
-  const router = useRouter();
 
   return (
     <Tabs screenOptions={{
@@ -13,8 +12,7 @@ export default function Layout() {
       tabBarInactiveTintColor: 'white',
       tabBarActiveTintColor: '#00BCD4',
       tabBarStyle: { backgroundColor: '#1E0175' }
-    }}
-    >
+    }}>
       {/* Tela Home */}
       <Tabs.Screen
         name="Home"
@@ -37,9 +35,7 @@ export default function Layout() {
                   returnKeyType='search'
                   style={styles.searchInput}
                   onSubmitEditing={() => {
-                    if (searchQuery) {
-                      router.push(`/search/${encodeURIComponent(searchQuery)}`); // Navega para a página de resultados
-                    }
+                    console.log("Pesquisa: ", searchQuery); // Ação ao pressionar "Enter" ou "Buscar"
                   }}
                 />
               </View>
@@ -75,6 +71,41 @@ export default function Layout() {
           headerTitle: "Categorias",
           headerTitleAlign: "center",
           headerTintColor: "white",
+          headerTitle: () => (
+            <View style={styles.headerContainer}>
+              {/* Campo de Pesquisa com Ícone de Lupa */}
+              <View style={styles.searchContainer}>
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={25}
+                  color="gray"
+                  style={styles.searchIcon}
+                />
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Buscar"
+                  placeholderTextColor="gray"
+                  returnKeyType='search'
+                  style={styles.searchInput}
+                  onSubmitEditing={() => {
+                    console.log("Pesquisa: ", searchQuery); // Ação ao pressionar "Enter" ou "Buscar"
+                  }}
+                />
+              </View>
+
+              {/* Ícone do Carrinho */}
+              <MaterialCommunityIcons
+                name="cart"
+                size={35}
+                color="white"
+                style={styles.cartIcon}
+                onPress={() => {
+                  router.push('/Carrinho'); // Navega para o carrinho
+                }}
+              />
+            </View>
+          ),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="menu"
@@ -136,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     paddingHorizontal: 10,
-    width: 350,
+    width: '90%',
     height: 35,
     marginBottom: 10
   },

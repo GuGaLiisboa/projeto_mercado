@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     backgroundColor: "#f8f8f8", 
-    padding: 20 
+    padding: 20,
   },
   noFavorites: { 
     fontSize: 18, 
@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  productImage: { width: 80, 
+  productImage: { 
+    width: 80, 
     height: 80, 
     resizeMode: "contain", 
     borderRadius: 10 
