@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Image, View, Keyboard, StatusBar } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Image, View, Keyboard, StatusBar, Platform } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import Toast, { ToastHandle } from '../src/components/Toast';
 import Input from "@/src/components/Input";
@@ -112,6 +112,10 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" translucent backgroundColor={'#FFF'} />
+      {Platform.OS === "android" && (
+        <StatusBar barStyle="light-content" translucent backgroundColor={'#1E0175'} />
+      )}
+
       <Toast ref={toastRef} />
 
       <View style={styles.logoContainer}>

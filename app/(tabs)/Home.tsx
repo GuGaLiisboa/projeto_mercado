@@ -1,10 +1,10 @@
 import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
-import ProductCard from "../../src/components/ProductCard"; // Componente de produto
+import { SafeAreaView, StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import ProductCard from "../../src/components/ProductCard"; 
 import productsData from "@/src/components/productsData";
-import categoriesData from "../../src/components/categoriesData"; // Dados das categorias
-import BannerSlider from "../../src/components/BannerSlider"; // Slide de banners
-import CategoryCard from "../../src/components/CategoryCard"; // Componente de categorias
+import categoriesData from "../../src/components/categoriesData"; 
+import BannerSlider from "../../src/components/BannerSlider"; 
+import CategoryCard from "../../src/components/CategoryCard"; 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
@@ -19,13 +19,20 @@ export default function Index({ navigation }) {
     // Limitando a quantidade de categorias na tela inicial
     const limitedCategories = categoriesData.slice(0, 10);
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                {/* Slide de Banner */}
-                <BannerSlider />
+    // Estrutura de dados para renderizar tudo em um único FlatList
+    const data = [
+        { type: "banner" }, // Seção de banner
+        { type: "categories", categories: limitedCategories }, // Seção de categorias
+        { type: "products", products: limitedProducts }, // Seção de produtos
+    ];
 
-                {/* Categorias */}
+    const renderItem = ({ item }) => {
+        if (item.type === "banner") {
+            return <BannerSlider />;
+        }
+
+        if (item.type === "categories") {
+            return (
                 <View style={styles.section}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.sectionTitle}>Categorias</Text>
@@ -42,7 +49,7 @@ export default function Index({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <FlatList
-                        data={limitedCategories} 
+                        data={item.categories}
                         renderItem={({ item }) => (
                             <CategoryCard
                                 category={item}
@@ -55,13 +62,15 @@ export default function Index({ navigation }) {
                         contentContainerStyle={styles.categoryList}
                     />
                 </View>
+            );
+        }
 
-                {/* Produtos */}
+        if (item.type === "products") {
+            return (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Novos Produtos</Text>
                     <FlatList
-                        // data={productsData}
-                        data={limitedProducts}
+                        data={item.products}
                         renderItem={({ item }) => (
                             <ProductCard
                                 product={item}
@@ -73,7 +82,19 @@ export default function Index({ navigation }) {
                         contentContainerStyle={styles.productList}
                     />
                 </View>
-            </ScrollView>
+            );
+        }
+
+        return null;
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => `${item.type}-${index}`}
+            />
         </SafeAreaView>
     );
 }
@@ -86,12 +107,12 @@ const styles = StyleSheet.create({
     section: {
         paddingVertical: 0,
         paddingHorizontal: 10,
-        marginTop: 15
+        marginTop: 15,
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: "bold",
-        marginBottom: 10
+        marginBottom: 10,
     },
     categoryList: {
         paddingVertical: 0,
@@ -106,8 +127,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     viewAllButton: {
-        flexDirection: "row", 
-        alignItems: "center", 
+        flexDirection: "row",
+        alignItems: "center",
         padding: 5,
     },
     viewAllText: {
