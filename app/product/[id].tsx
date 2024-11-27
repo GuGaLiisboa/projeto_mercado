@@ -1,5 +1,5 @@
 import { usePathname, useRouter } from "expo-router";
-import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Platform } from "react-native";
 import productsData from "../../src/components/productsData";
 import categoriesData from "@/src/components/categoriesData";
 import { useState, useEffect } from "react";
@@ -438,7 +438,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 50,
     position: "absolute",
-    bottom: 30,
+    // bottom: 30,
+    bottom: Platform.OS === "android" ? 20 : 30,
     left: 10,
     right: 10,
   },
