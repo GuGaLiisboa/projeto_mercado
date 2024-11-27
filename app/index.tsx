@@ -74,9 +74,9 @@ export default function Index() {
         await AsyncStorage.setItem("userUid", user.uid);
 
         // Exibir os dados do usuário no log
-        console.log("Dados do usuário logado:", user);
-        console.log("UID:", user.uid);
-        console.log("Email:", user.email);
+        // console.log("Dados do usuário logado:", user);
+        // console.log("UID:", user.uid);
+        // console.log("Email:", user.email);
 
         // Buscar dados adicionais do usuário
         get(ref(db, 'user/' + user.uid))
