@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: '90%',
     height: 35,
-    marginBottom: 10
+    marginBottom: 10,
   },
   searchIcon: {
     marginRight: 5,
