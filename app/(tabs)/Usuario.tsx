@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity, TextInput, ScrollView } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { auth, db } from "../../scripts/firebase-config";
-import { get, ref, update } from "firebase/database";
+import { get, ref } from "firebase/database";
 import { signOut } from "firebase/auth";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Usuario() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
 
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
       get(ref(db, "user/" + user.uid)).then((snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.val();
-          setUserData(data);
-          setName(data.nome);
-          setPhone(data.telefone);
-          setAddress(data.endereco);
+          setUserData(snapshot.val());
         } else {
           console.log("Nenhum dado encontrado para este usuário.");
         }
@@ -42,89 +41,62 @@ export default function Usuario() {
       });
   };
 
-  const handleSaveChanges = () => {
-    const user = auth.currentUser;
-    if (user && name && phone && address) {
-      const updates = {
-        nome: name,
-        telefone: phone,
-        endereco: address,
-      };
-
-      update(ref(db, "user/" + user.uid), updates)
-        .then(() => {
-          setIsEditing(false);
-          console.log("Dados atualizados com sucesso!");
-        })
-        .catch((error) => {
-          console.error("Erro ao salvar os dados: ", error);
-        });
-    }
-  };
+  const menuItems = [
+    { icon: "account", label: "Meus dados", route: "/meus-dados" },
+    { icon: "cart", label: "Meus pedidos", route: "/meus-pedidos" },
+    { icon: "email", label: "Mensagens", route: "/mensagens" },
+    { icon: "heart", label: "Favoritos", route: "/favoritos" },
+    { icon: "tag", label: "Descontos", route: "/descontos" },
+    { icon: "trash-can", label: "Excluir Conta", route: "/excluir-conta" },
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {userData ? (
-        <ScrollView style={styles.scrollView}>
-          <Text style={styles.title}>Meu Perfil</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Image
+          source={{
+            uri: userData?.fotoPerfil || "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/catAlimentos.webp",
+          }}
+          style={styles.profileImage}
+        />
+        <View style={styles.userInfo}>
+          <Text style={styles.welcomeText}>
+            Bem-vindo, {userData?.nome || "Usuário"}
+          </Text>
+          <Text style={styles.emailText}>{userData?.email}</Text>
+        </View>
+      </View>
 
-          {/* Exibição dos dados do usuário */}
-          {!isEditing ? (
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoLabel}>Nome:</Text>
-              <Text style={styles.infoValue}>{userData.nome}</Text>
-              <Text style={styles.infoLabel}>Email:</Text>
-              <Text style={styles.infoValue}>{userData.email}</Text>
-              <Text style={styles.infoLabel}>Telefone:</Text>
-              <Text style={styles.infoValue}>{userData.telefone}</Text>
-              <Text style={styles.infoLabel}>Endereço:</Text>
-              <Text style={styles.infoValue}>{userData.endereco}</Text>
-            </View>
-          ) : (
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoLabel}>Nome:</Text>
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                style={styles.input}
-              />
-              <Text style={styles.infoLabel}>Telefone:</Text>
-              <TextInput
-                value={phone}
-                onChangeText={setPhone}
-                style={styles.input}
-                keyboardType="phone-pad"
-              />
-              <Text style={styles.infoLabel}>Endereço:</Text>
-              <TextInput
-                value={address}
-                onChangeText={setAddress}
-                style={styles.input}
-              />
-            </View>
-          )}
+      {/* Menu List */}
+      <View style={styles.menuContainer}>
+        {menuItems.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.menuItem}
+            onPress={() => router.push(item.route)}
+          >
+            <MaterialCommunityIcons
+              name={item.icon}
+              size={24}
+              color="#333"
+              style={styles.menuIcon}
+            />
+            <Text style={styles.menuText}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
 
-          {/* Botões de edição e logout */}
-          <View style={styles.buttonContainer}>
-            {isEditing ? (
-              <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
-                <Text style={styles.buttonText}>Salvar Alterações</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
-                <Text style={styles.buttonText}>Editar</Text>
-              </TouchableOpacity>
-            )}
-
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-              <MaterialCommunityIcons name="logout" size={24} color="white" />
-              <Text style={styles.logoutText}>Sair</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      ) : (
-        <Text style={styles.loadingText}>Carregando dados do usuário...</Text>
-      )}
+        {/* Logout Button */}
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <MaterialCommunityIcons
+            name="logout"
+            size={24}
+            color="#FF8800"
+            style={styles.menuIcon}
+          />
+          <Text style={styles.logoutText}>Sair</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -132,81 +104,61 @@ export default function Usuario() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#F5F5F5",
   },
-  scrollView: {
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#FF8800",
+  },
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+  userInfo: {
     flex: 1,
   },
-  title: {
-    fontSize: 28,
+  welcomeText: {
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#1E0175",
-    textAlign: "center",
-    marginBottom: 20,
+    color: "#FFF",
   },
-  infoContainer: {
-    marginBottom: 30,
+  emailText: {
+    fontSize: 14,
+    color: "#FFF",
   },
-  infoLabel: {
+  menuContainer: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    marginTop: 10,
+  },
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEE",
+  },
+  menuIcon: {
+    marginRight: 15,
+  },
+  menuText: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#333",
-    marginBottom: 5,
-  },
-  infoValue: {
-    fontSize: 18,
-    color: "#555",
-    marginBottom: 15,
-    lineHeight: 22,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ddd",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    fontSize: 16,
-    backgroundColor: "#fff",
-  },
-  buttonContainer: {
-    alignItems: "center",
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: "#FF8800",
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    marginBottom: 15,
-    width: "80%",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FF5555",
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    marginTop: 15,
-    width: "80%",
-    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+    marginTop: 20,
   },
   logoutText: {
-    color: "#fff",
     fontSize: 18,
-    marginLeft: 10,
-  },
-  loadingText: {
-    fontSize: 18,
-    color: "#1E0175",
-    textAlign: "center",
-    marginTop: 20,
+    fontWeight: "bold",
+    color: "#FF8800",
   },
 });

@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   incentiveText: {
     fontSize: 14,
-    color: "#1E0175",
+    color: "#FF8800",
     fontWeight: "600",
     marginBottom: 15,
   },
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   checkoutButton: {
-    backgroundColor: "#1E0175",
+    backgroundColor: "#FF8800",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,
