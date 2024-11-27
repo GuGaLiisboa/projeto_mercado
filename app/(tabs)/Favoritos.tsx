@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router"; // Importar useRouter
+import { useRouter } from "expo-router"; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

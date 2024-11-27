@@ -18,6 +18,8 @@ export default function RootLayout() {
 
       <Stack.Screen options={{ headerShown: false }} name="category" />
 
+      <Stack.Screen options={{ headerShown: false }} name="search" />
+
       {/* Carrinho de compras */}
       <Stack.Screen name="Carrinho" options={{ 
         headerShown: true,

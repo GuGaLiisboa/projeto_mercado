@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { router, Tabs } from "expo-router";
+import { useRouter, Tabs } from "expo-router";
 
 export default function Layout() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para armazenar o valor da pesquisa
+  const router = useRouter();
 
   return (
-    <Tabs screenOptions={{ 
+    <Tabs screenOptions={{
       headerStyle: { backgroundColor: "#1E0175" },
-      tabBarInactiveTintColor: 'white', 
-      tabBarActiveTintColor: '#00BCD4', 
-      tabBarStyle: {backgroundColor: '#1E0175'}}}>
+      tabBarInactiveTintColor: 'white',
+      tabBarActiveTintColor: '#00BCD4',
+      tabBarStyle: { backgroundColor: '#1E0175' }
+    }}
+    >
       {/* Tela Home */}
       <Tabs.Screen
         name="Home"
@@ -34,7 +37,9 @@ export default function Layout() {
                   returnKeyType='search'
                   style={styles.searchInput}
                   onSubmitEditing={() => {
-                    console.log("Pesquisa: ", searchQuery); // Ação ao pressionar "Enter" ou "Buscar"
+                    if (searchQuery) {
+                      router.push(`/search/${encodeURIComponent(searchQuery)}`); // Navega para a página de resultados
+                    }
                   }}
                 />
               </View>
