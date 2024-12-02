@@ -12,7 +12,8 @@ export default [
     {
         id: 2,
         name: "Arroz Branco Tio Urbano 1kg",
-        price: 10.00,
+        originalPrice: 10.00,
+        price: 8.50,
         description: "O Arroz tio Urbano é reconhecido em todo o Brasil pela sua qualidade e sabor. Com mais de 60 anos de tradição, a Urbano é referência em arroz e suas marcas",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/2.webp",
         marca: "Urbano",
@@ -62,7 +63,8 @@ export default [
     {
         id: 7,
         name: "Leite em pó Integral 400g Camponesa",
-        price: 8.00,
+        originalPrice: 8.00,
+        price: 7.00,
         description: "Leite em Pó Camponesa Integral 400g",
         image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/7.webp",
         marca: "Camponesa",
