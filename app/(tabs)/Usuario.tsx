@@ -38,7 +38,7 @@ export default function Usuario() {
     { icon: "account", label: "Meus dados", route: "/telasUsuario/meus-dados" },
     { icon: "cart", label: "Meus pedidos", route: "/telasUsuario/meus-pedidos" },
     { icon: "email", label: "Mensagens", route: "/telasUsuario/mensagens" },
-    { icon: "tag", label: "Descontos", route: "/telasUsuario/descontos" },
+    { icon: "tag", label: "Ofertas", route: "/telasUsuario/descontos" },
     { icon: "trash-can", label: "Excluir Conta", route: "/telasUsuario/excluir-conta" },
   ];
 

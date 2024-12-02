@@ -71,7 +71,7 @@ export default function Layout() {
             <Stack.Screen
                 name="descontos"
                 options={{
-                    headerTitle: "Descontos",
+                    headerTitle: "Ofertas",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
 
