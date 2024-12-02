@@ -111,23 +111,23 @@ export default [
     },
     {
         id: 12,
-        name: "Product test 1",
-        price: 5.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Teste",
-        categoria: 2,
+        name: "Creme Dental Colgate Máxima Proteção Anticáries 180G",
+        price: 7.80,
+        description: "O creme dental Colgate Máxima Proteção anticárie contém micropartículas de cálcio, que fortalecem os dentes. Além disso, esse creme dental previne a cárie, protegendo a sua saúde bucal e da sua família.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/11.webp",
+        marca: "Colgate",
+        categoria: 7,
         unidade: "Gramas"
     },
     {
         id: 13,
-        name: "Product test 2",
-        price: 16.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Maratá",
-        categoria: 1,
-        unidade: "Gramas"
+        name: "Refrigerante Guaraná Antarctica 2L",
+        price: 8.50,
+        description: "O refrigerante que é coisa nossa, do Brasil. Lançado em 1921, é a primeira bebida com sabor de guaraná.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/12.webp",
+        marca: "Antarctica",
+        categoria: 2,
+        unidade: "Litros"
     },
     {
         id: 14,

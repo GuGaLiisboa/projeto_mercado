@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import {SafeAreaView, Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { auth, db } from "../../scripts/firebase-config";
 import { get, ref } from "firebase/database";
@@ -42,9 +35,9 @@ export default function Usuario() {
   };
 
   const menuItems = [
-    { icon: "account", label: "Meus dados", route: "/meus-dados" },
-    { icon: "cart", label: "Meus pedidos", route: "/meus-pedidos" },
-    { icon: "email", label: "Mensagens", route: "/mensagens" },
+    { icon: "account", label: "Meus dados", route: "/tabsUsuario/meus-dados" },
+    { icon: "cart", label: "Meus pedidos", route: "/tabsUsuario/meus-pedidos" },
+    { icon: "email", label: "Mensagens", route: "/tabsUsuario/mensagens" },
     { icon: "heart", label: "Favoritos", route: "/favoritos" },
     { icon: "tag", label: "Descontos", route: "/descontos" },
     { icon: "trash-can", label: "Excluir Conta", route: "/excluir-conta" },
