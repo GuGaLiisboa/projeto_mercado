@@ -20,8 +20,10 @@ export default function RootLayout() {
 
       <Stack.Screen options={{ headerShown: false }} name="search" />
 
+      <Stack.Screen options={{ headerShown: false }} name="telasUsuario" />
+
       {/* Carrinho de compras */}
-      <Stack.Screen name="Carrinho" options={{ 
+      <Stack.Screen name="Carrinho" options={{
         headerShown: true,
         headerTitle: "Carrinho",
         headerTitleAlign: 'center',
@@ -30,14 +32,14 @@ export default function RootLayout() {
 
         headerLeft: () => (
           <MaterialCommunityIcons
-              name="chevron-left"
-              size={35}
-              color="white"
-              style={{ marginLeft: -10 }}
-              onPress={() => router.back()} // Voltar para a tela anterior
+            name="chevron-left"
+            size={35}
+            color="white"
+            style={{ marginLeft: -10 }}
+            onPress={() => router.back()} // Voltar para a tela anterior
           />
-      ),
-       }}/>
+        ),
+      }} />
     </Stack>
   );
 }

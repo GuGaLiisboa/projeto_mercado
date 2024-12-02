@@ -8,11 +8,12 @@ export default function Layout() {
   const router = useRouter();
 
   return (
-    <Tabs screenOptions={{ 
+    <Tabs screenOptions={{
       headerStyle: { backgroundColor: "#1E0175" },
-      tabBarInactiveTintColor: 'white', 
-      tabBarActiveTintColor: '#00BCD4', 
-      tabBarStyle: {backgroundColor: '#1E0175'}}}>
+      tabBarInactiveTintColor: 'white',
+      tabBarActiveTintColor: '#00BCD4',
+      tabBarStyle: { backgroundColor: '#1E0175' }
+    }}>
       {/* Tela Home */}
       <Tabs.Screen
         name="Home"
@@ -150,6 +151,15 @@ export default function Layout() {
               size={32}
             />
           ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="telasUsuario"
+        options={{
+          headerTitle: "Minha Conta",
+          headerTitleAlign: "center",
+          headerTintColor: "white",
         }}
       />
     </Tabs>

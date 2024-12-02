@@ -35,12 +35,11 @@ export default function Usuario() {
   };
 
   const menuItems = [
-    { icon: "account", label: "Meus dados", route: "/tabsUsuario/meus-dados" },
-    { icon: "cart", label: "Meus pedidos", route: "/tabsUsuario/meus-pedidos" },
-    { icon: "email", label: "Mensagens", route: "/tabsUsuario/mensagens" },
-    { icon: "heart", label: "Favoritos", route: "/favoritos" },
-    { icon: "tag", label: "Descontos", route: "/descontos" },
-    { icon: "trash-can", label: "Excluir Conta", route: "/excluir-conta" },
+    { icon: "account", label: "Meus dados", route: "/telasUsuario/meus-dados" },
+    { icon: "cart", label: "Meus pedidos", route: "/telasUsuario/meus-pedidos" },
+    { icon: "email", label: "Mensagens", route: "/telasUsuario/mensagens" },
+    { icon: "tag", label: "Descontos", route: "/telasUsuario/descontos" },
+    { icon: "trash-can", label: "Excluir Conta", route: "/telasUsuario/excluir-conta" },
   ];
 
   return (
@@ -55,7 +54,7 @@ export default function Usuario() {
         />
         <View style={styles.userInfo}>
           <Text style={styles.welcomeText}>
-            Bem-vindo, {userData?.nome || "Usuário"}
+            Bem-vindo(a), {userData?.nome || "Usuário"}
           </Text>
           <Text style={styles.emailText}>{userData?.email}</Text>
         </View>
