@@ -29,7 +29,7 @@ const ProductCard = ({ product }) => {
       {discountPercentage && (
         <View style={styles.discountTag}>
           <MaterialCommunityIcons name="tag" size={18} color="#fff" />
-          <Text style={styles.discountTagText}>Promoção</Text>
+          <Text style={styles.discountTagText}>Oferta</Text>
         </View>
       )}
 

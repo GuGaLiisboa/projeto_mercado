@@ -14,7 +14,7 @@ export default function Index({ navigation }) {
     // Ordenando os produtos pela data de criação (mais recentes primeiro)
     const limitedProducts = productsData
         .sort((a, b) => b.id - a.id)
-        .slice(0, 22); // <= Altera a quantidade de produtos na pagina
+        .slice(0, 20); // <= Altera a quantidade de produtos na pagina
 
     // Limitando a quantidade de categorias na tela inicial
     const limitedCategories = categoriesData.slice(0, 10);
