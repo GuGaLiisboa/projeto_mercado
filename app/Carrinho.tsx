@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ref, get, set, update, remove } from "firebase/database";
 import { db } from "../scripts/firebase-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 interface Product {
   id: number;
@@ -21,6 +22,7 @@ interface CartItem {
 const Carrinho = () => {
   const [cartItems, setCartItems] = useState<(CartItem & Product)[]>([]);
   const [userUid, setUserUid] = useState<string | null>(null);
+  const [userAddress, setUserAddress] = useState<string | null>(null);
 
   const FRETE = 5;
   const FRETE_GRATIS_LIMITE = 100;
@@ -33,6 +35,38 @@ const Carrinho = () => {
     };
     loadUserUid();
   }, []);
+
+  // Recuperar o UID do usuário
+  useEffect(() => {
+    const loadUserUid = async () => {
+      const uid = await AsyncStorage.getItem("userUid");
+      setUserUid(uid);
+    };
+    loadUserUid();
+  }, []);
+
+  // Buscar o endereço do usuário no Firebase
+  useEffect(() => {
+    if (!userUid) return;
+
+    const fetchUserAddress = async () => {
+      try {
+        const userRef = ref(db, `user/${userUid}`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setUserAddress(userData.endereco || "Endereço não disponível");
+        } else {
+          setUserAddress("Endereço não encontrado");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar endereço do usuário:", error);
+        setUserAddress("Erro ao carregar endereço");
+      }
+    };
+
+    fetchUserAddress();
+  }, [userUid]);
 
   // Carregar o carrinho do Firebase
   useEffect(() => {
@@ -115,17 +149,35 @@ const Carrinho = () => {
 
   return (
     <View style={styles.container}>
-      {cartItems.length === 0 ? (
-        <Text style={styles.emptyCartText}>Seu carrinho está vazio...</Text>
-      ) : (
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+      <FlatList
+        data={cartItems.length > 0 ? [{ id: "address", type: "address" }, ...cartItems] : []} // Só exibe o endereço se houver itens no carrinho
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => {
+          if (item.type === "address") {
+            // Renderiza a seção de endereço apenas quando há itens no carrinho
+            return (
+              <View style={styles.container}>
+                <Text style={styles.sectionTitle}>
+                  <MaterialCommunityIcons name="map-marker" size={20} color="#FF8800" /> ENDEREÇO
+                </Text>
+                <View style={styles.addressSection}>
+                  <View style={styles.addressInfo}>
+                    <Text style={styles.addressTitle}>Endereço de Entrega</Text>
+                    <Text style={styles.addressDetails}>
+                      {userAddress || "Carregando endereço..."}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            );
+          }
+
+          // Renderiza os itens do carrinho
+          return (
             <View style={styles.cartItem}>
               <Image source={{ uri: item.image }} style={styles.itemImage} />
               <View style={styles.itemInfo}>
-              <Text style={styles.brandName}>{item.marca || "Marca não disponível"}</Text>
+                <Text style={styles.brandName}>{item.marca || "Marca não disponível"}</Text>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.subHeading}>Valor Total:</Text>
                 <Text style={styles.itemPrice}>
@@ -153,30 +205,60 @@ const Carrinho = () => {
                 </View>
               </View>
             </View>
-          )}
-        />
-      )}
+          );
+        }}
+        ListEmptyComponent={
+          // Exibe a mensagem quando o carrinho está vazio
+          <Text style={styles.emptyCartText}>Seu carrinho está vazio...</Text>
+        }
+      />
 
       {cartItems.length > 0 && (
         <View style={styles.footer}>
-          <Text style={styles.totalItems}>Itens no carrinho: {cartItems.length}</Text>
-          <Text style={styles.totalPrice}>Total: R$ {totalWithFrete.toFixed(2)}</Text>
-          <Text style={[styles.incentiveText, { color: totalPrice >= FRETE_GRATIS_LIMITE ? "#1E0175" : "#888" }]}>
-            {freteMessage}
-          </Text>
+          {/* Cabeçalho */}
+          <View style={styles.summaryHeader}>
+            <MaterialCommunityIcons name="file-document-outline" size={24} color="#FF8800" />
+            <Text style={styles.summaryTitle}>RESUMO</Text>
+          </View>
+
+          {/* Valor dos Produtos */}
+          <View style={styles.summaryRow}>
+            <Text style={styles.label}>Valor dos Produtos:</Text>
+            <Text style={styles.value}>R$ {totalPrice.toFixed(2)}</Text>
+          </View>
+
+          {/* Frete */}
+          <View style={styles.summaryRow}>
+            <Text style={styles.label}>Frete:</Text>
+            <Text style={styles.value}>
+              R$ {(totalPrice >= FRETE_GRATIS_LIMITE ? 0 : FRETE).toFixed(2)}
+            </Text>
+          </View>
+
+          {/* Divisor */}
+          <View style={styles.divider} />
+
+          {/* Total no Pix */}
+          <View style={styles.summaryRow}>
+            <Text style={styles.totalLabel}>Valor no Pix:</Text>
+            <Text style={styles.totalValue}>R$ {totalWithFrete.toFixed(2)}</Text>
+          </View>
+
+          {/* Botões */}
           <View style={styles.footerButtons}>
             <TouchableOpacity style={styles.checkoutButton}>
               <Text style={styles.checkoutText}>Finalizar Compra</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.continueShoppingButton}>
+            <TouchableOpacity style={styles.continueShoppingButton} onPress={() => router.replace("/Home")}>
               <Text style={styles.continueShoppingText}>Continuar Comprando</Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
     </View>
-  );
+  )
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -189,6 +271,44 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
     marginTop: 50,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+    marginTop: -10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addressSection: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    overflow: "hidden",
+    borderLeftColor: "#FF8800",
+    borderLeftWidth: 5,
+    marginHorizontal: -7
+  },
+  addressInfo: {
+    padding: 15,
+    flex: 1,
+  },
+  addressTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  addressDetails: {
+    fontSize: 14,
+    color: "#888",
+    marginTop: 5,
   },
   cartItem: {
     flexDirection: "row",
@@ -266,13 +386,12 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: "#fff",
-    borderRadius: 10,
     padding: 15,
+    borderRadius: 10,
+    elevation: 3,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3,
-    alignItems: "center",
     marginTop: 20,
   },
   totalItems: {
@@ -295,34 +414,74 @@ const styles = StyleSheet.create({
   footerButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    marginTop: 15,
   },
   checkoutButton: {
-    backgroundColor: "#FF8800",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
+    backgroundColor: "#1E0175",
+    padding: 10,
+    borderRadius: 5,
     flex: 1,
-    marginRight: 10,
+    alignItems: "center",
+    justifyContent: 'center',
+    marginRight: 5,
   },
   checkoutText: {
     color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
   },
   continueShoppingButton: {
-    backgroundColor: "#f4f4f4",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 5,
     flex: 1,
+    alignItems: "center",
+    marginLeft: 5,
   },
   continueShoppingText: {
-    color: "#1E0175",
+    color: "#888",
+    fontWeight: "bold",
     fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
+  },
+  summaryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  summaryTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginLeft: 8,
+  },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: "#888",
+  },
+  value: {
+    fontSize: 16,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#eee",
+    marginVertical: 10,
+  },
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FF8800",
   },
 });
 
