@@ -39,7 +39,7 @@ export default function Usuario() {
     { icon: "cart", label: "Meus pedidos", route: "/telasUsuario/meus-pedidos" },
     { icon: "email", label: "Mensagens", route: "/telasUsuario/mensagens" },
     { icon: "tag", label: "Ofertas", route: "/telasUsuario/descontos" },
-    { icon: "trash-can", label: "Excluir Conta", route: "/telasUsuario/excluir-conta" },
+    // { icon: "trash-can", label: "Excluir Conta", route: "/telasUsuario/excluir-conta" },
   ];
 
   return (
@@ -48,7 +48,7 @@ export default function Usuario() {
       <View style={styles.header}>
         <Image
           source={{
-            uri: userData?.fotoPerfil || "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/catAlimentos.webp",
+            uri: userData?.fotoPerfil || "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/profile.png",
           }}
           style={styles.profileImage}
         />
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#FF8800",
+    backgroundColor: "#fff",
   },
   profileImage: {
     width: 60,
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FFF",
+    color: "#333",
   },
   emailText: {
     fontSize: 14,
-    color: "#FFF",
+    color: "#333",
   },
   menuContainer: {
     flex: 1,
