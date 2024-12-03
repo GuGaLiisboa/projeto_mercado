@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Modal } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ref, get, set, update, remove } from "firebase/database";
+import { ref, get, set, getDatabase, update, remove } from "firebase/database";
 import { db } from "../scripts/firebase-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
@@ -23,6 +23,8 @@ const Carrinho = () => {
   const [cartItems, setCartItems] = useState<(CartItem & Product)[]>([]);
   const [userUid, setUserUid] = useState<string | null>(null);
   const [userAddress, setUserAddress] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false); // Controle do modal
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null); // Método de pagamento selecionado
 
   const FRETE = 5;
   const FRETE_GRATIS_LIMITE = 100;
@@ -147,6 +149,50 @@ const Carrinho = () => {
   const freteMessage = totalPrice >= FRETE_GRATIS_LIMITE ? "Frete Grátis!" : `Frete: R$ ${FRETE.toFixed(2)}`;
   const totalWithFrete = totalPrice >= FRETE_GRATIS_LIMITE ? totalPrice : totalPrice + FRETE;
 
+  // Lógica para finalizar compra
+  const handleFinalizarCompra = async () => {
+    if (!selectedPaymentMethod) {
+      alert("Selecione uma forma de pagamento!");
+      return;
+    }
+
+    try {
+      const db = getDatabase();
+      const nextPedidoIdRef = ref(db, `user/${userUid}/nextPedidoId`);
+
+      // Obtém o próximo ID de pedido
+      const snapshot = await get(nextPedidoIdRef);
+      let nextPedidoId = snapshot.exists() ? snapshot.val() : 1;  // Se não existir, começa com 1
+
+      // Cria a referência do pedido com o novo ID sequencial
+      const pedidoRef = ref(db, `user/${userUid}/pedidos/${nextPedidoId}`);
+      const pedido = {
+        produtos: cartItems.map(({ id, quantity, price }) => ({
+          id,
+          quantity,
+          total: quantity * price,
+        })),
+        total: totalWithFrete,
+        formaPagamento: selectedPaymentMethod,
+        data: new Date().toISOString(),
+      };
+
+      // Salva o pedido com o ID sequencial
+      await set(pedidoRef, pedido);
+
+      // Atualiza o próximo ID de pedido para o próximo número
+      await set(nextPedidoIdRef, nextPedidoId + 1);
+
+      alert("Pedido finalizado com sucesso!");
+      setModalVisible(false); // Fecha o modal
+      setCartItems([]); // Limpa o carrinho
+    } catch (error) {
+      console.error("Erro ao finalizar compra:", error);
+      alert("Erro ao finalizar compra.");
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -246,7 +292,7 @@ const Carrinho = () => {
 
           {/* Botões */}
           <View style={styles.footerButtons}>
-            <TouchableOpacity style={styles.checkoutButton}>
+            <TouchableOpacity style={styles.checkoutButton} onPress={() => setModalVisible(true)} >
               <Text style={styles.checkoutText}>Finalizar Compra</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.continueShoppingButton} onPress={() => router.replace("/Home")}>
@@ -255,10 +301,63 @@ const Carrinho = () => {
           </View>
         </View>
       )}
-    </View>
-  )
-};
 
+      {/* Modal */}
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Confirmar Pedido</Text>
+            <Text style={styles.modalMessage}>Deseja finalizar sua compra?</Text>
+
+            {/* Opções de pagamento */}
+            <View style={styles.paymentMethods}>
+              <Text style={styles.paymentTitle}>Selecione a Forma de Pagamento:</Text>
+
+              {/* Dinheiro */}
+              <TouchableOpacity
+                onPress={() => setSelectedPaymentMethod("Dinheiro")}
+                style={[styles.paymentOption, selectedPaymentMethod === "Dinheiro" && styles.selectedPaymentOption]}
+              >
+                <Text style={styles.paymentText}>Dinheiro</Text>
+              </TouchableOpacity>
+
+              {/* Pix */}
+              <TouchableOpacity
+                onPress={() => setSelectedPaymentMethod("Pix")}
+                style={[styles.paymentOption, selectedPaymentMethod === "Pix" && styles.selectedPaymentOption]}
+              >
+                <Text style={styles.paymentText}>Pix</Text>
+              </TouchableOpacity>
+
+              {/* Cartão */}
+              <TouchableOpacity
+                onPress={() => setSelectedPaymentMethod("Cartão")}
+                style={[styles.paymentOption, selectedPaymentMethod === "Cartão" && styles.selectedPaymentOption]}
+              >
+                <Text style={styles.paymentText}>Cartão</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Ações do modal */}
+            <View style={styles.modalActions}>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={[styles.modalButton, styles.cancelButton]}>
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleFinalizarCompra} style={[styles.modalButton, styles.confirmButton]}>
+                <Text style={styles.confirmButtonText}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -483,6 +582,99 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FF8800",
   },
+
+  // Estilos do modal
+  buttonText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  },
+  modalContainer: {
+    width: "85%",
+    padding: 25,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
+  },
+  modalMessage: {
+    fontSize: 16,
+    marginBottom: 25,
+    textAlign: "center",
+    color: "#666",
+  },
+  paymentMethods: {
+    marginBottom: 25,
+    width: "100%",
+  },
+  paymentTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
+  },
+  paymentOption: {
+    padding: 12,
+    backgroundColor: "#f0f0f0",
+    marginBottom: 10,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paymentText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  modalActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginHorizontal: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#f44336",  // Cor para o botão Cancelar
+  },
+  confirmButton: {
+    backgroundColor: "#4CAF50",  // Cor para o botão Confirmar
+  },
+  cancelButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  confirmButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  selectedPaymentOption: {
+    backgroundColor: "#c0c0c0",
+  },
+
 });
 
 export default Carrinho;
