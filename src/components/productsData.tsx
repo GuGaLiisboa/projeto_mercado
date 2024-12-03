@@ -212,4 +212,45 @@ export default [
         categoria: 1,
         unidade: "Gramas"
     },
+    {
+        id: 22,
+        name: "Leite Condensado Semidesnatado Piracanjuba 395G",
+        price: 7.90,
+        description: "Ingrediente clássico das melhores receitas, o Leite Condensado Piracanjuba é cremoso, saboroso, perfeito para fazer doces e recheios.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/22.webp",
+        marca: "Piracanjuba",
+        categoria: 5,
+        unidade: "Gramas"
+    },
+    {
+        id: 23,
+        name: "Papel Higiênico Neve Toque De Seda Folha Dupla com 24UND",
+        price: 39.90,
+        originalPrice: 52.50,
+        description: "O Papel Higiênico Neve Toque da Seda é dermatologicamente testado e possui uma maciez insuperável e qualidade superior em folhas duplas. É delicado com a pele e contém a tecnologia Dermacare, que mantém o PH natural da derme.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/23.webp",
+        marca: "Neve",
+        categoria: 7,
+        unidade: "Unidade"
+    },
+    {
+        id: 24,
+        name: "Fralda Descartável Huggies Supreme Care Disney Baby XG 24UND",
+        price: 36.55,
+        description: "Proporcione máximo conforto e proteção ao seu bebê com a Fralda Huggies Supreme Care. Com ajuste perfeito e barreiras antivazamento, ela mantém a pele sequinha por até 12 horas. Decorada com personagens Disney, é ideal para bebês de até 15kg, garantindo cuidado e diversão em cada troca.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/24.webp",
+        marca: "Huggies",
+        categoria: 7,
+        unidade: "Unidade"
+    },
+    {
+        id: 25,
+        name: "Macarrão Instantâneo Nissin Sabor Galinha Caipira 85G",
+        price: 2.95,
+        description: "Prepare uma refeição prática e saborosa com o Macarrão Instantâneo Sabor Galinha Caipira. Com tempero irresistível e preparo rápido em apenas 3 minutos, é perfeito para matar a fome no dia a dia ou em momentos de correria. Delicie-se com o gostinho caseiro que você adora!",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/25.webp",
+        marca: "Nissin",
+        categoria: 1,
+        unidade: "Gramas"
+    },
 ];
