@@ -103,20 +103,20 @@ export default [
     },
     {
         id: 11,
-        name: "Café maratá",
-        price: 16.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Maratá",
+        name: "Feijão Carioca Camil Tipo 1 1Kg",
+        price: 6.20,
+        description: "Quem é que não conhece o feijão nosso de cada dia! O feijão carioca conquistou seu lugar na mesa do brasileiro e habitualmente acompanha aquele delicioso arroz com sabor de família.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/11.webp",
+        marca: "Camil",
         categoria: 1,
-        unidade: "Gramas"
+        unidade: "Kg"
     },
     {
         id: 12,
         name: "Creme Dental Colgate Máxima Proteção Anticáries 180G",
         price: 7.80,
         description: "O creme dental Colgate Máxima Proteção anticárie contém micropartículas de cálcio, que fortalecem os dentes. Além disso, esse creme dental previne a cárie, protegendo a sua saúde bucal e da sua família.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/11.webp",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/12.webp",
         marca: "Colgate",
         categoria: 7,
         unidade: "Gramas"
@@ -126,39 +126,39 @@ export default [
         name: "Refrigerante Guaraná Antarctica 2L",
         price: 8.50,
         description: "O refrigerante que é coisa nossa, do Brasil. Lançado em 1921, é a primeira bebida com sabor de guaraná.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/12.webp",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/13.webp",
         marca: "Antarctica",
         categoria: 2,
         unidade: "Litros"
     },
     {
         id: 14,
-        name: "Product test 3",
-        price: 16.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Maratá",
-        categoria: 1,
-        unidade: "Gramas"
+        name: "Cerveja Heineken Lata 350ml - 12UND",
+        price: 50.00,
+        description: "A cerveja é elogiada por sua qualidade, sabor e reputação, sendo considerada a melhor do mercado por muitos consumidores.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/14.webp",
+        marca: "Heineken",
+        categoria: 2,
+        unidade: "Mililitros"
     },
     {
         id: 15,
-        name: "Product test 4",
-        price: 16.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Maratá",
-        categoria: 1,
-        unidade: "Gramas"
+        name: "Papel Higiênico Personal Vip Folha Tripla Com 12 Rolos De 20M",
+        price: 18.10,
+        description: "Papel Higiênico Folha Tripla Neutro com Extrato de Algodão Natural Personal Vip3 20m Pacote Leve 12 Pague 11 Unidades",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/15.webp",
+        marca: "Personal",
+        categoria: 7,
+        unidade: "Unidade"
     },
     {
         id: 16,
-        name: "Product test 5",
-        price: 16.00,
-        description: "deliciosa a cada toque.",
-        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/10.webp",
-        marca: "Maratá",
-        categoria: 1,
+        name: "Salgadinho Doritos Queijo Nacho 210G",
+        price: 17.90,
+        description: "DORITOS® é a tortilha chips número #1 do mundo. DORITOS® para aqueles que querem sair do óbvio, que buscam sempre desafiar a lógica do senso comum. E se você é um desses que nem sempre quer fazer sentido, você é um dos nossos. DORITOS® FOR THE BOLD.",
+        image: "https://pub-cfffccb2abb548a3ab74ccaf93a42397.r2.dev/16.webp",
+        marca: "Doritos",
+        categoria: 9,
         unidade: "Gramas"
     },
     {
